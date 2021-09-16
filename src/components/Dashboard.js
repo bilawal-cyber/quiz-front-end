@@ -10,8 +10,9 @@ import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
 import Link from '@material-ui/core/Link';
 import Levels from '../components/Levels'
-import Levelone from './LevelOne';
-import {Addicon} from './Icon'
+import LevelOne from './LevelOne';
+import {Addicon} from './Buttons';
+import {AddQuestionButton} from './Buttons'
 
 
 function Copyright() {
@@ -111,6 +112,8 @@ const useStyles = makeStyles((theme) => ({
 
 
 
+
+
 export default function Dashboard() {
     const [level, setLevel] = useState(
         
@@ -139,16 +142,27 @@ export default function Dashboard() {
         }
     }
 
-    const [inputList, setInputList] = useState([]);
+    const [options, setOptions] = useState([]);
 
   const addInputField = event => {
-    setInputList(inputList.concat(<Levelone key={inputList.length} onClick={removeInputField} index={inputList.length} />));
+
+
+    const id= new Date().getTime()
+    const newOption = {
+        index : id ,
+        isTrue: false,
+        option: ''
+    }
+
+    setOptions(prevState=>([
+        ...prevState,{...newOption}
+    ]));
   }
 
   const removeInputField= (id) =>{
-
-    console.log(id)
-                setInputList(inputList.filter((field) => field.id !== id))
+        setOptions(prevState=>(
+            prevState.filter(f=>f.index !== id)
+        ))
             
                 
   }
@@ -173,20 +187,30 @@ export default function Dashboard() {
         <Container maxWidth="lg" className={classes.container}>
         <Grid container spacing={10} justifyContent="center">
                 <Grid  item xs={10} style={{background:"#efefef"}}>
-                <Box  className={classes.root} p={5} justifyContent="center">
+                <Box  className={classes.root} p={4} justifyContent="center">
                     <Levels getLevel={getLevel}/>
                 </Box>
-                {level.levelOne && 
+                
                         <Box  className={classes.root} mt={2}>
-                        <Box display="flex" mx={3}>
-                        <Addicon onClickAdd={addInputField}/>
+                        {level.levelOne && 
+                            <>
+                            
+                                <Box display="flex" mx={3}>
+                                <Addicon onClickAdd={addInputField}/>
+                                </Box>
+                                <List>
+                                    <LevelOne options={options} onClick={removeInputField} setOptions={setOptions}/>
+                                {options.length>0 ?
+                                <AddQuestionButton />
+                                :'Add options'} 
+                                </List>
+
+                            </>
+
+                        }
                         </Box>
-                        <List>
-                        {inputList}
-                        </List>
-                        
-                        </Box>
-                }
+           
+
                 {level.levelTwo &&
                         <Box  className={classes.root} mt={4} justifyContent="center">
                         <h3>True false</h3>

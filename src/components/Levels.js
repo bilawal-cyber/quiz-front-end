@@ -20,18 +20,18 @@ export default function Levels({getLevel}) {
       <RadioGroup row aria-label="position" name="position" defaultValue="top" onChange={(event)=>getLevel(event.target.value)}>
         <FormControlLabel
           value="1"
-          control={<Radio color="primary" />}
-          label="Start"
+          control={<Radio color="default" />}
+          label="One"
           labelPlacement="start"
         />
         <FormControlLabel 
         value="2" 
-        control={<Radio color="primary" />} 
-        label="End"
+        control={<Radio color="default" />} 
+        label="Two"
         labelPlacement="start"
         />
       </RadioGroup>
-      <TextField id="question" label="Question" variant="outlined" size="medium" type="string"/>
+      <TextField id="question" label="Question" variant="outlined" style={{width:500}} type="string"/>
     </FormControl>
   );
 }

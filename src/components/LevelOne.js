@@ -1,34 +1,58 @@
-import React from "react";
-import Checkbox from "@material-ui/core/Checkbox";
+// import React from "react";
 import TextField from "@material-ui/core/TextField";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
-import {Removeicon} from './Icon'
+import {Removeicon} from './Buttons';
+import Checkbox from '@material-ui/core/Checkbox';
+import { useState } from "react";
 
-export default function Levelone( {onClick,index} ) {
-//   const [checked, setChecked] = React.useState(false);
 
-//   const handleChange = (event) => {
-//     setChecked(event.target.checked);
-//   };
+
+export default function Levelone( { options , onClick, setOptions} ) {
+   
+
+        const setOption=(v,id)=>{
+                setOptions( 
+                    options.map((op) => {
+                       return op.index === id ? { ...op, option : v } : op
+                      })
+                )
+        }
+
+        const setIsTrue = (check,id) =>{
+            setOptions( 
+                options.map((op) => {
+                   return op.index === id ? { ...op, isTrue : check } : op
+                  })
+            )
+        }
+ 
+
 
   return (
     <>
-      <List>
-        <ListItem alignItems="center">
-          <Checkbox
-            // checked={checked}
-            // onChange={handleChange}
-            inputProps={{ "aria-label": "primary checkbox" }}
-          />
-          <TextField 
-            fullWidth
-            // disabled={checked}
-            label="Option"
-          />
-          <Removeicon onClick={onClick} index={index}/>
-        </ListItem>
-      </List>
+      {
+
+          options.map((op)=>(
+                    <List key={op.index}>
+                    <ListItem alignItems="center">
+                    <Checkbox
+                    color="primary"
+                    checked={op.isTrue}
+                    onChange={(e)=>setIsTrue(e.target.checked,op.index)}
+                    inputProps={{ 'aria-label': 'secondary checkbox' }}
+                    />
+                    <TextField 
+                    fullWidth
+                    label="Option"
+                    // value={option}
+                    onChange={(e)=>setOption(e.target.value,op.index)}
+                    />
+                    <Removeicon onClick={onClick.bind(this, op.index)}/>
+                    </ListItem>
+                    </List>
+          ))
+      }
     </>
   );
 }
