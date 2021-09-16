@@ -12,7 +12,8 @@ import Link from '@material-ui/core/Link';
 import Levels from '../components/Levels'
 import LevelOne from './LevelOne';
 import {Addicon} from './Buttons';
-import {AddQuestionButton} from './Buttons'
+import {AddQuestionButton} from './Buttons';
+import axios  from 'axios';
 
 
 function Copyright() {
@@ -115,50 +116,62 @@ const useStyles = makeStyles((theme) => ({
 
 
 export default function Dashboard() {
+
+
+    const [options, setOptions] = useState([]);
+
+    const [Question, setQuestion] = useState('');
+
+    const [finalState,setFinalState] = useState({})
+
+    const base_url='http://127.0.0.1:5000/api';
+
     const [level, setLevel] = useState(
-        
             {
                 levelOne:false,
                 levelTwo:false
             }
-        
     );
-
-
+//choose option
     const getLevel=(value)=>{
-
-        if(value==='1'){
-            setLevel({
-                ...level,
-                levelOne: !level.levelOne,
-                levelTwo: false,
-            });
-        }else{
-            setLevel({
-                ...level,
-                levelTwo: !level.levelTwo,
-                levelOne:false
-            });
-        }
+        (value==='1') ?
+            setLevel(
+                {
+                    levelOne: !level.levelOne,
+                    levelTwo: false,
+                }
+            )
+        :
+            setLevel(
+                {
+                    levelOne: false,
+                    levelTwo: !level.levelTwo,
+                }
+            );
+        
     }
 
-    const [options, setOptions] = useState([]);
+//catch question and store 
+    const getQuestion=(v)=>{
+        setQuestion(v)
+    }
 
-  const addInputField = event => {
 
-
+//add options
+  const addInputField = () => {
     const id= new Date().getTime()
     const newOption = {
         index : id ,
-        isTrue: false,
+        is_correct: false,
         option: ''
     }
-
     setOptions(prevState=>([
         ...prevState,{...newOption}
     ]));
   }
 
+
+//remove options
   const removeInputField= (id) =>{
         setOptions(prevState=>(
             prevState.filter(f=>f.index !== id)
@@ -166,6 +179,29 @@ export default function Dashboard() {
             
                 
   }
+
+  
+//combine answer and questions
+
+  const finalCall=()=>{
+        const type = level.levelOne ? '1' : '2';
+        const data = {
+            type : type,
+            question : Question,
+            answers : [
+                ...options
+            ]
+        }
+        setFinalState(data)  
+
+        axios.post(base_url+'/createQuestion',data)
+            .then((res)=>console.log(res))
+                .catch((error)=>console.log(error))
+
+
+
+  }
+
 
 
   const classes = useStyles();
@@ -188,7 +224,7 @@ export default function Dashboard() {
         <Grid container spacing={10} justifyContent="center">
                 <Grid  item xs={10} style={{background:"#efefef"}}>
                 <Box  className={classes.root} p={4} justifyContent="center">
-                    <Levels getLevel={getLevel}/>
+                    <Levels getLevel={getLevel} getQuestion={getQuestion}/>
                 </Box>
                 
                         <Box  className={classes.root} mt={2}>
@@ -201,7 +237,7 @@ export default function Dashboard() {
                                 <List>
                                     <LevelOne options={options} onClick={removeInputField} setOptions={setOptions}/>
                                 {options.length>0 ?
-                                <AddQuestionButton />
+                                <AddQuestionButton onClick={finalCall}/>
                                 :'Add options'} 
                                 </List>
 

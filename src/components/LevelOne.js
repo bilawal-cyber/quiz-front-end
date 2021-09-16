@@ -22,7 +22,7 @@ export default function Levelone( { options , onClick, setOptions} ) {
         const setIsTrue = (check,id) =>{
             setOptions( 
                 options.map((op) => {
-                   return op.index === id ? { ...op, isTrue : check } : op
+                   return op.index === id ? { ...op, is_correct : check } : {...op, is_correct : false}
                   })
             )
         }
@@ -38,7 +38,7 @@ export default function Levelone( { options , onClick, setOptions} ) {
                     <ListItem alignItems="center">
                     <Checkbox
                     color="primary"
-                    checked={op.isTrue}
+                    checked={op.is_correct}
                     onChange={(e)=>setIsTrue(e.target.checked,op.index)}
                     inputProps={{ 'aria-label': 'secondary checkbox' }}
                     />

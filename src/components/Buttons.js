@@ -13,7 +13,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export const AddQuestionButton=()=>{
+export const AddQuestionButton=({onClick})=>{
     const classes = useStyles();
         return(
             <Button
@@ -21,7 +21,7 @@ export const AddQuestionButton=()=>{
             color="default"
             className={classes.button}
             startIcon={<CloudUploadIcon />}
-            onClick={()=>{console.log('hy')}}
+            onClick={onClick}
           >
             Upload
           </Button>

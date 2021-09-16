@@ -6,7 +6,7 @@ import FormControl from '@material-ui/core/FormControl';
 import FormLabel from '@material-ui/core/FormLabel';
 import TextField from '@material-ui/core/TextField';
 
-export default function Levels({getLevel}) {
+export default function Levels({getLevel, getQuestion}) {
 
   
 
@@ -31,7 +31,12 @@ export default function Levels({getLevel}) {
         labelPlacement="start"
         />
       </RadioGroup>
-      <TextField id="question" label="Question" variant="outlined" style={{width:500}} type="string"/>
+      <TextField id="question"
+       label="Question" 
+      variant="outlined"
+       style={{width:500}} 
+      type="string" 
+       onChange={(e)=>getQuestion(e.target.value)}/>
     </FormControl>
   );
 }
