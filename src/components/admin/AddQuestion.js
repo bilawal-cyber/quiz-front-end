@@ -6,7 +6,7 @@ import FormControl from '@material-ui/core/FormControl';
 import FormLabel from '@material-ui/core/FormLabel';
 import TextField from '@material-ui/core/TextField';
 
-export default function Levels({getLevel, getQuestion}) {
+export default function AddQuestion({getLevel, getQuestion}) {
 
   
 
@@ -35,6 +35,7 @@ export default function Levels({getLevel, getQuestion}) {
        label="Question" 
       variant="outlined"
       type="string" 
+      sx={5}
        onChange={(e)=>getQuestion(e.target.value)}/>
     </FormControl>
   );

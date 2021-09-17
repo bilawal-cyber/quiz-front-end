@@ -2,13 +2,13 @@
 import TextField from "@material-ui/core/TextField";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
-import {Removeicon} from './Buttons';
+import {Removeicon} from '../Buttons';
 import Checkbox from '@material-ui/core/Checkbox';
 import { useState } from "react";
 
 
 
-export default function Levelone( { options , onClick, setOptions} ) {
+export default function AddOptions( { options , onClick, setOptions} ) {
    
 
         const setOption=(v,id)=>{
@@ -37,7 +37,7 @@ export default function Levelone( { options , onClick, setOptions} ) {
                     <List key={op.index}>
                     <ListItem alignItems="center">
                     <Checkbox
-                    color="#aab6fe"
+                    style={{color:"#4b636e"}}
                     checked={op.is_correct}
                     onChange={(e)=>setIsTrue(e.target.checked,op.index)}
                     inputProps={{ 'aria-label': 'secondary checkbox' }}
