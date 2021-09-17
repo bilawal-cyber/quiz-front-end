@@ -18,7 +18,7 @@ export const AddQuestionButton=({onClick})=>{
         return(
             <Button
             variant="contained"
-            color="default"
+            style={{backgroundColor:'#f9683a'}}
             className={classes.button}
             startIcon={<CloudUploadIcon />}
             onClick={onClick}
@@ -34,7 +34,7 @@ export  const Addicon=({ onClickAdd })=> {
     return (
       <div>
         <Tooltip title="Add">
-          <IconButton>
+          <IconButton style={{backgroundColor:"#aab6fe"}}>
             <AddIcon onClick={onClickAdd}/>
           </IconButton>
         </Tooltip>
@@ -47,7 +47,7 @@ export  const Addicon=({ onClickAdd })=> {
       <div>
          <Tooltip title="Delete">
           <IconButton>
-            <DeleteIcon onClick={()=>onClick(index)}/>
+            <DeleteIcon onClick={()=>onClick(index)} style={{color:'#a4a4a4'}} />
           </IconButton>
         </Tooltip>
       </div>

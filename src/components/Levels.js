@@ -34,7 +34,6 @@ export default function Levels({getLevel, getQuestion}) {
       <TextField id="question"
        label="Question" 
       variant="outlined"
-       style={{width:500}} 
       type="string" 
        onChange={(e)=>getQuestion(e.target.value)}/>
     </FormControl>

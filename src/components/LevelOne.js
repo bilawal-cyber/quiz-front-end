@@ -37,7 +37,7 @@ export default function Levelone( { options , onClick, setOptions} ) {
                     <List key={op.index}>
                     <ListItem alignItems="center">
                     <Checkbox
-                    color="primary"
+                    color="#aab6fe"
                     checked={op.is_correct}
                     onChange={(e)=>setIsTrue(e.target.checked,op.index)}
                     inputProps={{ 'aria-label': 'secondary checkbox' }}

@@ -1,33 +1,14 @@
 import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import CssBaseline from '@material-ui/core/CssBaseline';
 import Box from '@material-ui/core/Box';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
 import List from '@material-ui/core/List';
-import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
-import Link from '@material-ui/core/Link';
 import Levels from '../components/Levels'
 import LevelOne from './LevelOne';
 import {Addicon} from './Buttons';
 import {AddQuestionButton} from './Buttons';
 import axios  from 'axios';
-
-
-function Copyright() {
-  return (
-    <Typography variant="body2" color="textSecondary" align="center">
-      {'Copyright © '}
-      <Link color="inherit" href="https://material-ui.com/">
-        Your Website
-      </Link>{' '}
-      {new Date().getFullYear()}
-      {'.'}
-    </Typography>
-  );
-}
 
 const drawerWidth = 240;
 
@@ -122,7 +103,7 @@ export default function Dashboard() {
 
     const [Question, setQuestion] = useState('');
 
-    const [finalState,setFinalState] = useState({})
+    // const [finalState,setFinalState] = useState({})
 
     const base_url='http://127.0.0.1:5000/api';
 
@@ -192,7 +173,7 @@ export default function Dashboard() {
                 ...options
             ]
         }
-        setFinalState(data)  
+        // setFinalState(data)  
 
         axios.post(base_url+'/createQuestion',data)
             .then((res)=>console.log(res))
@@ -202,6 +183,10 @@ export default function Dashboard() {
 
   }
 
+    const box={
+      background: "#d1d9ff",
+      border:"1px solid rgb(19, 47, 76)"
+    }
 
 
   const classes = useStyles();
@@ -210,45 +195,42 @@ export default function Dashboard() {
 
   return (
     <div className={classes.root}>
-      <CssBaseline />
-      <AppBar>
-        <Toolbar className={classes.toolbar}>
-          <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
-            Dashboard
-          </Typography>
-        </Toolbar>
-      </AppBar>
-      <main className={classes.content}>
-        <div className={classes.appBarSpacer} />
+      <main className={classes.content} style={{backgroundColor:"#333"}}>
+        <div className={classes.appBarSpacer}/>
         <Container maxWidth="lg" className={classes.container}>
         <Grid container spacing={10} justifyContent="center">
-                <Grid  item xs={10} style={{background:"#efefef"}}>
-                <Box  className={classes.root} p={4} justifyContent="center">
+                <Grid  item xs={8}>
+                <Box  className={classes.root} p={4} justifyContent="center"
+                 sx={{ borderRadius: 16 }} style={box}
+                >
                     <Levels getLevel={getLevel} getQuestion={getQuestion}/>
                 </Box>
                 
-                        <Box  className={classes.root} mt={2}>
+
                         {level.levelOne && 
                             <>
-                            
-                                <Box display="flex" mx={3}>
+                                <Box style={box} className={classes.root} mt={2} p={2} 
+                                sx={{ borderRadius: 16 }} justifyContent="center"
+                                >
                                 <Addicon onClickAdd={addInputField}/>
-                                </Box>
                                 <List>
                                     <LevelOne options={options} onClick={removeInputField} setOptions={setOptions}/>
                                 {options.length>0 ?
                                 <AddQuestionButton onClick={finalCall}/>
                                 :'Add options'} 
                                 </List>
-
+                                
+                                </Box>
                             </>
 
                         }
-                        </Box>
+                       
            
 
                 {level.levelTwo &&
-                        <Box  className={classes.root} mt={4} justifyContent="center">
+                        <Box  className={classes.root} mt={4} justifyContent="center"
+                        sx={{ borderRadius: 16 }} style={box}
+                        >
                         <h3>True false</h3>
                         </Box>
                 }
@@ -264,9 +246,6 @@ export default function Dashboard() {
                 </Box>
                 </Grid>
                 </Grid>
-          <Box pt={4}>
-            <Copyright />
-          </Box>
         </Container>
       </main>
     </div>
