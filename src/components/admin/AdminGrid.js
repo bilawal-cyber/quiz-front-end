@@ -7,6 +7,7 @@ import AddOptions from './addOptions';
 import {Addicon,AddQuestionButton} from '../Buttons';
 import axios  from 'axios';
 import { Grid } from '@material-ui/core';
+import  LinearProgress  from '@material-ui/core/LinearProgress';
 
 const drawerWidth = 240;
 
@@ -135,8 +136,14 @@ export default function AdminGrid() {
                     levelTwo: !level.levelTwo,
                 }
             );
+        setProgessBarShow(true)
+        setInterval(() => {
+          setProgessBarShow(false);
+        }, 1000);
         
     }
+
+    const [progressBarShow,setProgessBarShow] = useState(false)
 
 //catch question and store 
     const getQuestion=(v)=>{
@@ -200,18 +207,21 @@ export default function AdminGrid() {
 
 
   return (
-                <Grid item xs={5}>
-                <Box  className={classes.root} p={3} justifyContent="center"
-                 sx={{ borderRadius: 16 }} style={box}
+                <Grid item>
+                <Box  p={3} justifyContent="center"
+                 sx={{ borderRadius: 16, width: 500 }} style={box} 
                 >
                     <AddQuestion getLevel={getLevel} getQuestion={getQuestion}/>
                 </Box>
+                {
+                  progressBarShow &&
+                  <LinearProgress style={{padding:"2px", borderRadius:"16px"}}/>
+                }
                 
-
                         {level.levelOne && 
                             <>
-                                <Box style={box} className={classes.root} mt={2} p={2} 
-                                sx={{ borderRadius: 16 }} justifyContent="center"
+                                <Box style={box} className={classes.root} mt={2} p={3} 
+                                sx={{ borderRadius: 16, width: 500 }} justifyContent="center"
                                 >
                                 <Addicon onClickAdd={addInputField}/>
                                 <List>
@@ -225,12 +235,13 @@ export default function AdminGrid() {
                             </>
 
                         }
-                       
+                              
+                                  
            
 
                 {level.levelTwo &&
                         <Box  className={classes.root} mt={4} justifyContent="center"
-                        sx={{ borderRadius: 16 }} style={box}
+                        sx={{ borderRadius: 16, width: 500 }} style={box} p={3}
                         >
                         <h3>True false</h3>
                         </Box>

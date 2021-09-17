@@ -15,9 +15,11 @@ export default function AddQuestion({getLevel, getQuestion}) {
 //     }
 
   return (
-    <FormControl component="fieldset">
+    <FormControl component="fieldset" fullWidth sx={{ m: 5 }}>
       <FormLabel component="legend">Choose Level</FormLabel>
-      <RadioGroup row aria-label="position" name="position" defaultValue="top" onChange={(event)=>getLevel(event.target.value)}>
+      <RadioGroup row aria-label="position"
+       name="position" defaultValue="top"
+        onChange={(event)=>getLevel(event.target.value)}>
         <FormControlLabel
           value="1"
           control={<Radio color="default" />}
@@ -35,7 +37,6 @@ export default function AddQuestion({getLevel, getQuestion}) {
        label="Question" 
       variant="outlined"
       type="string" 
-      sx={5}
        onChange={(e)=>getQuestion(e.target.value)}/>
     </FormControl>
   );

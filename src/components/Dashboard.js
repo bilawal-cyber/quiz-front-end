@@ -4,12 +4,17 @@ import Box from '@material-ui/core/Box';
 import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
 import AdminGrid from './admin/AdminGrid';
+import { Tabs,Tab } from '@material-ui/core';
+import PlayerGrid from './player/PlayerGrid';
+import ResultGrid from './results/ResultGrid'
 
 // const drawerWidth = 240;
 
 const useStyles = makeStyles((theme) => ({
   // root: {
   //   display: 'flex',
+  //   flexDirection:'column',
+  //   flexGrow:1,
   // },
   // toolbar: {
   //   paddingRight: 24, // keep right padding when drawer closed
@@ -45,17 +50,17 @@ const useStyles = makeStyles((theme) => ({
   // title: {
   //   flexGrow: 1,
   // },
-  drawerPaperClose: {
-    overflowX: 'hidden',
-    transition: theme.transitions.create('width', {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen,
-    }),
-    width: theme.spacing(7),
-    [theme.breakpoints.up('sm')]: {
-      width: theme.spacing(9),
-    },
-  },
+  // drawerPaperClose: {
+  //   overflowX: 'hidden',
+  //   transition: theme.transitions.create('width', {
+  //     easing: theme.transitions.easing.sharp,
+  //     duration: theme.transitions.duration.leavingScreen,
+  //   }),
+  //   width: theme.spacing(7),
+  //   [theme.breakpoints.up('sm')]: {
+  //     width: theme.spacing(9),
+  //   },
+  // },
   content: {
     flexGrow: 1,
     height: '100vh',
@@ -65,15 +70,15 @@ const useStyles = makeStyles((theme) => ({
     paddingTop: theme.spacing(4),
     paddingBottom: theme.spacing(4),
   },
-  paper: {
-    padding: theme.spacing(2),
-    display: 'flex',
-    overflow: 'auto',
-    flexDirection: 'column',
-  },
-  fixedHeight: {
-    height: 240,
-  },
+  // paper: {
+  //   padding: theme.spacing(2),
+  //   display: 'flex',
+  //   overflow: 'auto',
+  //   flexDirection: 'column',
+  // },
+  // fixedHeight: {
+  //   height: 240,
+  // },
 }));
 
 
@@ -82,24 +87,52 @@ const useStyles = makeStyles((theme) => ({
 
 
 export default function Dashboard() {
+  const [currentTab, setValue] = useState('one');
+
+const handleChange = (event, newValue) => {
+  setValue(newValue);
+};
+const box={
+  background: "#d1d9ff",
+  border:"1px solid rgb(19, 47, 76)"
+}
   const classes = useStyles();
   return (
     <div className={classes.root}>
       <main className={classes.content} style={{backgroundColor:"rgb(0, 30, 60)"}}>
         <div className={classes.appBarSpacer}/>
-        <Container maxWidth="lg" className={classes.container}>
-        <Grid container spacing={3} justifyContent="center">
-                <AdminGrid />
-                <Grid  item xs={12} >
-                <Box>
-
+        <Container maxWidth="lg">
+        <Grid  
+                container spacing={4}
+                direction="column"
+                alignItems="center"
+                justifyContent="center"
+          >
+          <Grid item>
+                <Box 
+                  p={3} 
+                 sx={{ borderRadius: 16 ,width:500}} style={box}
+                >
+                <Tabs
+                value={currentTab}
+                onChange={handleChange}
+                textColor="secondary"
+                indicatorColor="secondary"
+                aria-label="secondary tabs example"
+                >
+                <Tab value="one" label="Add Questions" />
+                <Tab value="two" label="Take Test" />
+                <Tab value="three" label="Final Results" />
+                </Tabs>
                 </Box>
-                </Grid>
-                <Grid  item xs={12} >
-                <Box>
-
-                </Box>
-                </Grid>
+          </Grid>
+                
+                  {(currentTab==='one') ? <AdminGrid /> : ''}
+               
+                 {(currentTab==='two') ? <PlayerGrid /> : ''}
+             
+                 {(currentTab==='three') ? <ResultGrid /> : ''}
+               
                 </Grid>
         </Container>
       </main>

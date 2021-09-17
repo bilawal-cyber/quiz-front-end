@@ -34,8 +34,8 @@ export  const Addicon=({ onClickAdd })=> {
     return (
       <div>
         <Tooltip title="Add">
-          <IconButton style={{backgroundColor:"#aab6fe"}}>
-            <AddIcon onClick={onClickAdd}/>
+          <IconButton onClick={onClickAdd} style={{backgroundColor:"#aab6fe"}}>
+            <AddIcon/>
           </IconButton>
         </Tooltip>
       </div>
@@ -46,8 +46,8 @@ export  const Addicon=({ onClickAdd })=> {
     return (
       <div>
          <Tooltip title="Delete">
-          <IconButton>
-            <DeleteIcon onClick={()=>onClick(index)} style={{color:'#ef5350'}} />
+          <IconButton onClick={()=>onClick(index)}>
+            <DeleteIcon  style={{color:'#ef5350'}} />
           </IconButton>
         </Tooltip>
       </div>
