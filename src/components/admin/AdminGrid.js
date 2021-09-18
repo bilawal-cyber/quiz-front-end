@@ -8,6 +8,11 @@ import {Addicon,AddQuestionButton} from '../Buttons';
 import axios  from 'axios';
 import { Grid } from '@material-ui/core';
 import  LinearProgress  from '@material-ui/core/LinearProgress';
+import Checkbox from '@material-ui/core/Checkbox';
+import FormGroup from '@material-ui/core/FormGroup';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import FormControl from '@material-ui/core/FormControl';
+import FormLabel from '@material-ui/core/FormLabel';
 
 const drawerWidth = 240;
 
@@ -114,32 +119,15 @@ export default function AdminGrid() {
 
     const base_url='http://127.0.0.1:5000/api';
 
-    const [level, setLevel] = useState(
-            {
-                levelOne:false,
-                levelTwo:false
-            }
-    );
+    const [level, setLevel] = useState('');
 //choose option
     const getLevel=(value)=>{
+      console.log(value);
+
         (value==='1') ?
-            setLevel(
-                {
-                    levelOne: !level.levelOne,
-                    levelTwo: false,
-                }
-            )
+            setLevel('1')
         :
-            setLevel(
-                {
-                    levelOne: false,
-                    levelTwo: !level.levelTwo,
-                }
-            );
-        setProgessBarShow(true)
-        setInterval(() => {
-          setProgessBarShow(false);
-        }, 1000);
+            setLevel('2');
         
     }
 
@@ -178,7 +166,7 @@ export default function AdminGrid() {
 //combine answer and questions
 
   const finalCall=()=>{
-        const type = level.levelOne ? '1' : '2';
+        const type = level;
         const data = {
             type : type,
             question : Question,
@@ -196,6 +184,11 @@ export default function AdminGrid() {
 
   }
 
+  const handleTrueFalse=()=>{
+    console.log('yes')
+  }
+
+
     const box={
       background: "#d1d9ff",
       border:"1px solid rgb(19, 47, 76)"
@@ -211,41 +204,53 @@ export default function AdminGrid() {
                 <Box  p={3} justifyContent="center"
                  sx={{ borderRadius: 16, width: 500 }} style={box} 
                 >
-                    <AddQuestion getLevel={getLevel} getQuestion={getQuestion}/>
+                    <AddQuestion getLevel={getLevel} getQuestion={getQuestion} level={level} />
+                    {level==='2'?
+                     
+                         <FormGroup aria-label="position" row>
+                           <FormControlLabel
+                             value="true"
+                             control={<Checkbox  style={{color:"#4b636e"}} 
+                             onChange={handleTrueFalse}
+                             checked={true}
+                             />
+                            }
+                             label="True"
+                             labelPlacement="start"
+                           />
+                             <FormControlLabel
+                             value="false"
+                             control={<Checkbox  style={{color:"#4b636e"}}
+                              onChange={handleTrueFalse}/>}
+                             label="False"
+                             labelPlacement="start"
+                           />
+                         </FormGroup> : ''
+                     
+                }
                 </Box>
                 {
                   progressBarShow &&
                   <LinearProgress style={{padding:"2px", borderRadius:"16px"}}/>
                 }
                 
-                        {level.levelOne && 
-                            <>
-                                <Box style={box} className={classes.root} mt={2} p={3} 
+                        {level==='1' ? 
+                                <Box style={box} className={classes.root} mt={1} p={3} 
                                 sx={{ borderRadius: 16, width: 500 }} justifyContent="center"
                                 >
                                 <Addicon onClickAdd={addInputField}/>
                                 <List>
-                                    <AddOptions options={options} onClick={removeInputField} setOptions={setOptions}/>
+                                    <AddOptions options={options}
+                                    setProgessBarShow={setProgessBarShow}
+                                     onClick={removeInputField}
+                                     setOptions={setOptions}/>
                                 {options.length>0 ?
                                 <AddQuestionButton onClick={finalCall}/>
                                 :'Add options'} 
                                 </List>
                                 
-                                </Box>
-                            </>
-
+                                </Box> : ''
                         }
-                              
-                                  
-           
-
-                {level.levelTwo &&
-                        <Box  className={classes.root} mt={4} justifyContent="center"
-                        sx={{ borderRadius: 16, width: 500 }} style={box} p={3}
-                        >
-                        <h3>True false</h3>
-                        </Box>
-                }
                 </Grid>
   );
 }

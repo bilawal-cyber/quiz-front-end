@@ -6,7 +6,7 @@ import FormControl from '@material-ui/core/FormControl';
 import FormLabel from '@material-ui/core/FormLabel';
 import TextField from '@material-ui/core/TextField';
 
-export default function AddQuestion({getLevel, getQuestion}) {
+export default function AddQuestion({getLevel, getQuestion, level}) {
 
   
 
@@ -21,13 +21,13 @@ export default function AddQuestion({getLevel, getQuestion}) {
        name="position" defaultValue="top"
         onChange={(event)=>getLevel(event.target.value)}>
         <FormControlLabel
-          value="1"
+          value={(level==='1')?level:'1'}
           control={<Radio color="default" />}
           label="One"
           labelPlacement="start"
         />
         <FormControlLabel 
-        value="2" 
+        value={(level==='2')?level:'2'} 
         control={<Radio color="default" />} 
         label="Two"
         labelPlacement="start"

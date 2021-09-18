@@ -4,11 +4,11 @@ import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import {Removeicon} from '../Buttons';
 import Checkbox from '@material-ui/core/Checkbox';
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 
 
-export default function AddOptions( { options , onClick, setOptions} ) {
+export default function AddOptions( { options , onClick, setOptions,setProgessBarShow} ) {
    
 
         const setOption=(v,id)=>{
@@ -26,13 +26,19 @@ export default function AddOptions( { options , onClick, setOptions} ) {
                   })
             )
         }
+
+          useEffect(()=>{
+            setProgessBarShow(true)
+                setInterval(() => {
+                  setProgessBarShow(false);
+                }, 2000);
+          },[setProgessBarShow])
  
 
 
   return (
     <>
       {
-
           options.map((op)=>(
                     <List key={op.index}>
                     <ListItem alignItems="center">
@@ -45,7 +51,7 @@ export default function AddOptions( { options , onClick, setOptions} ) {
                     <TextField 
                     fullWidth
                     label="Option"
-                    // value={option}
+                    value={op.option}
                     onChange={(e)=>setOption(e.target.value,op.index)}
                     />
                     <Removeicon onClick={onClick.bind(this, op.index)}/>

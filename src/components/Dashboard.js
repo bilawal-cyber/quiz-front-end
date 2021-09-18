@@ -111,7 +111,7 @@ const box={
           <Grid item>
                 <Box 
                   p={3} 
-                 sx={{ borderRadius: 16 ,width:500}} style={box}
+                 sx={{ borderRadius: 16 ,width:500}} style={box} mt={1}
                 >
                 <Tabs
                 value={currentTab}
