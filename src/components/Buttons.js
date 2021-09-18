@@ -3,7 +3,6 @@ import Button from '@material-ui/core/Button';
 import { makeStyles } from '@material-ui/core/styles';
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 import AddIcon from '@material-ui/icons/Add';
-import Tooltip from '@material-ui/core/Tooltip';
 import  IconButton  from '@material-ui/core/IconButton';
 import DeleteIcon from '@material-ui/icons/Delete';
 
@@ -33,11 +32,9 @@ export  const Addicon=({ onClickAdd })=> {
 
     return (
       <div>
-        <Tooltip title="Add">
           <IconButton onClick={onClickAdd} style={{backgroundColor:"#aab6fe"}}>
             <AddIcon/>
           </IconButton>
-        </Tooltip>
       </div>
     );
   }
@@ -45,11 +42,9 @@ export  const Addicon=({ onClickAdd })=> {
   
     return (
       <div>
-         <Tooltip title="Delete">
           <IconButton onClick={()=>onClick(index)}>
             <DeleteIcon  style={{color:'#ef5350'}} />
           </IconButton>
-        </Tooltip>
       </div>
     );
   }
