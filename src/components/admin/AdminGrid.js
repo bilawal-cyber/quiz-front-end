@@ -122,7 +122,7 @@ export default function AdminGrid() {
     const [level, setLevel] = useState('');
 //choose option
     const getLevel=(value)=>{
-      console.log(value);
+
 
         (value==='1') ?
             setLevel('1')
@@ -175,10 +175,10 @@ export default function AdminGrid() {
             ]
         }
         // setFinalState(data)  
-
+console.log(type)
         axios.post(base_url+'/createQuestion',data)
             .then((res)=>console.log(res))
-                .catch((error)=>console.log(error))
+                .catch((error)=>console.log(error.response.data))
 
 
 
@@ -226,7 +226,9 @@ export default function AdminGrid() {
                              labelPlacement="start"
                            />
                          </FormGroup> : ''
-                     
+                }
+                {
+                  level==="2"?<AddQuestionButton onClick={finalCall}/>:''
                 }
                 </Box>
                 {
