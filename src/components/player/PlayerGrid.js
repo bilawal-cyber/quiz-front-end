@@ -1,13 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
-// import List from '@material-ui/core/List';
-// import AddQuestion from './AddQuestion'
-// import AddOptions from './addOptions';
-// import {Addicon,AddQuestionButton} from '../Buttons';
-// import axios  from 'axios';
 import { Grid } from '@material-ui/core';
-import  LinearProgress  from '@material-ui/core/LinearProgress';
+import LevelOne from './LevelOne';
+import axios from 'axios';
+import { FormControl,FormLabel,TextField } from '@material-ui/core';
+import { AddQuestionButton as UploadEmail} from '../Buttons';
 
 // const drawerWidth = 240;
 
@@ -95,24 +93,76 @@ const useStyles = makeStyles((theme) => ({
 
 
 
-export default function PlayerGrid() {
+export default function PlayerGrid({base_url}) {
 
     const box={
       background: "#d1d9ff",
       border:"1px solid rgb(19, 47, 76)"
     }
 
+    const [levelOne,showLevelOne] = useState([])
 
-//   const classes = useStyles();
+    const [level,setlevel] =useState({
+      one:false,
+      two:false
+    })
 
+    // useEffect(() => {
+    //       axios.get(base_url+'/getQuestionsLevelOne')
+    //               .then((res)=>showLevelOne(res.data))
+    //                   .catch(err=>console.log(err))
+    // }, [1])
+
+    const [email,setEmail] = useState('')
+
+  const classes = useStyles();
+      const getEmail=(v)=>{
+        var validRegex = /[^@ \t\r\n]+@[^@ \t\r\n]+\.[^@ \t\r\n]+/;
+        if (v.value.match(validRegex)) {
+              setEmail(v.value)
+        }else{
+          setlevel({one:false,two:false})
+        }
+      }
+
+      const checkEmail=()=>{
+        axios.post(base_url+'/createUser',{email:email})
+        .then(()=>{
+          axios.get(base_url+'/getQuestionsLevelOne')
+          .then((res)=>showLevelOne(res.data))
+              .catch(err=>console.log(err))
+        setlevel({one:true,two:false})                      
+        })
+        .catch((err)=>{
+            console.log(err.response)
+        })
+      }
 
 
   return (
     <Grid item  >
-    <Box   p={3} 
-     sx={{ borderRadius: 16 }} style={box}>
-      <h3>player</h3>
+      <Box p={3} 
+     sx={{ borderRadius: 16, width:500 }} style={box}>
+      <FormControl component="fieldset" fullWidth sx={{ m: 5 }}>
+      <FormLabel component="legend">Email</FormLabel>
+      <TextField
+       label="Type your email" 
+      variant="outlined"
+      type="string" 
+      error={false}
+       onChange={(e)=>{getEmail(e.target)}}/>
+      <UploadEmail  text={'next'}  onClick={checkEmail}/>
+    </FormControl>
+      </Box>
+
+
+    {
+      level.one &&
+      <Box p={3} mt={2}
+     sx={{ borderRadius: 16, width:500 }} style={box}>
+      <LevelOne levelOne={levelOne} showLevelOne={showLevelOne}/>
     </Box>
+    }
     </Grid>
   );
 }

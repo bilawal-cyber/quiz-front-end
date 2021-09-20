@@ -39,25 +39,26 @@ export default function AddOptions( { options , onClick, setOptions,setProgessBa
   return (
     <>
       {
-          options.map((op)=>(
-                    <List key={op.index}>
-                    <ListItem alignItems="center">
-                    <Checkbox
-                    style={{color:"#4b636e"}}
-                    checked={op.is_correct}
-                    onChange={(e)=>setIsTrue(e.target.checked,op.index)}
-                    inputProps={{ 'aria-label': 'secondary checkbox' }}
-                    />
-                    <TextField 
-                    fullWidth
-                    label="Option"
-                    value={op.option}
-                    onChange={(e)=>setOption(e.target.value,op.index)}
-                    />
-                    <Removeicon onClick={onClick.bind(this, op.index)}/>
-                    </ListItem>
-                    </List>
-          ))
+       (options.length>0)?
+       options.map((op)=>(
+        <List key={op.index}>
+        <ListItem alignItems="center">
+        <Checkbox
+        style={{color:"#4b636e"}}
+        checked={op.is_correct}
+        onChange={(e)=>setIsTrue(e.target.checked,op.index)}
+        inputProps={{ 'aria-label': 'secondary checkbox' }}
+        />
+        <TextField 
+        fullWidth
+        label="Option"
+        value={op.option}
+        onChange={(e)=>setOption(e.target.value,op.index)}
+        />
+        <Removeicon onClick={onClick.bind(this, op.index)}/>
+        </ListItem>
+        </List>
+)):''
       }
     </>
   );

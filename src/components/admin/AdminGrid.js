@@ -11,8 +11,6 @@ import  LinearProgress  from '@material-ui/core/LinearProgress';
 import Checkbox from '@material-ui/core/Checkbox';
 import FormGroup from '@material-ui/core/FormGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
-import FormControl from '@material-ui/core/FormControl';
-import FormLabel from '@material-ui/core/FormLabel';
 
 const drawerWidth = 240;
 
@@ -100,7 +98,7 @@ const useStyles = makeStyles((theme) => ({
 
 
 
-export default function AdminGrid() {
+export default function AdminGrid({base_url}) {
 
   const id= new Date().getTime()
     const [options, setOptions] = useState(
@@ -114,10 +112,9 @@ export default function AdminGrid() {
       );
 
     const [Question, setQuestion] = useState('');
+    const [TrueFalse,setTrueFalse] = useState({opOne:false,opTwo:false})
 
     // const [finalState,setFinalState] = useState({})
-
-    const base_url='http://127.0.0.1:5000/api';
 
     const [level, setLevel] = useState('');
 //choose option
@@ -162,6 +159,7 @@ export default function AdminGrid() {
                 
   }
 
+  const [errors,setErrors] = useState({}) //validation error storage
   
 //combine answer and questions
 
@@ -172,20 +170,37 @@ export default function AdminGrid() {
             question : Question,
             answers : [
                 ...options
-            ]
+            ],
+            correct_answer: TrueFalse.opOne ? TrueFalse.opOne : TrueFalse.opTwo
         }
         // setFinalState(data)  
 console.log(type)
         axios.post(base_url+'/createQuestion',data)
-            .then((res)=>console.log(res))
-                .catch((error)=>console.log(error.response.data))
+            .then((res)=>{
+              // console.log('set')
+              setOptions(
+                [
+                  {
+                      index : id ,
+                      is_correct: false,
+                      option: ''
+                  },
+              ]
+              )
+              setQuestion('')
+              setTrueFalse({opOne:false,opTwo:false})
+            })
+                .catch((err)=>{
+                  (type==='2')?setErrors({...errors,...err.response.data}) : setErrors({...errors,...err.response.data})
+                  // console.log(err.response)
+                })
 
 
 
   }
 
-  const handleTrueFalse=()=>{
-    console.log('yes')
+  const handleTrueFalse=(v)=>{
+        (v.target.value==="opOne")?setTrueFalse({opOne:true,opTwo:false}):setTrueFalse({opOne:false,opTwo:true})
   }
 
 
@@ -204,31 +219,39 @@ console.log(type)
                 <Box  p={3} justifyContent="center"
                  sx={{ borderRadius: 16, width: 500 }} style={box} 
                 >
-                    <AddQuestion getLevel={getLevel} getQuestion={getQuestion} level={level} />
+                    <AddQuestion 
+                    getLevel={getLevel} 
+                    getQuestion={getQuestion}
+                     level={level}
+                     validationError={errors} 
+                    setErrors={setErrors}
+                    question={Question}
+                    />
                     {level==='2'?
                      
                          <FormGroup aria-label="position" row>
                            <FormControlLabel
-                             value="true"
+                             value="opOne"
                              control={<Checkbox  style={{color:"#4b636e"}} 
-                             onChange={handleTrueFalse}
-                             checked={true}
+                             onChange={(e)=>handleTrueFalse(e)}
+                             checked={TrueFalse.opOne}
                              />
                             }
                              label="True"
                              labelPlacement="start"
                            />
                              <FormControlLabel
-                             value="false"
+                             value="opTwo"
                              control={<Checkbox  style={{color:"#4b636e"}}
-                              onChange={handleTrueFalse}/>}
+                              onChange={(e)=>handleTrueFalse(e)}/>}
                              label="False"
                              labelPlacement="start"
+                             checked={TrueFalse.opTwo}
                            />
                          </FormGroup> : ''
                 }
                 {
-                  level==="2"?<AddQuestionButton onClick={finalCall}/>:''
+                  level==="2"?<AddQuestionButton onClick={finalCall} text={'upload'}/>:''
                 }
                 </Box>
                 {
@@ -247,7 +270,7 @@ console.log(type)
                                      onClick={removeInputField}
                                      setOptions={setOptions}/>
                                 {options.length>0 ?
-                                <AddQuestionButton onClick={finalCall}/>
+                                <AddQuestionButton onClick={finalCall} text={'upload'}/>
                                 :'Add options'} 
                                 </List>
                                 

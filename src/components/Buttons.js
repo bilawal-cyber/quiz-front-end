@@ -12,7 +12,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export const AddQuestionButton=({onClick})=>{
+export const AddQuestionButton=({onClick,text})=>{
     const classes = useStyles();
         return(
             <Button
@@ -22,7 +22,7 @@ export const AddQuestionButton=({onClick})=>{
             startIcon={<CloudUploadIcon />}
             onClick={onClick}
           >
-            Upload
+            {text}
           </Button>
         )
 }
