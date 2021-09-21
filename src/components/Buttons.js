@@ -12,15 +12,16 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export const AddQuestionButton=({onClick,text})=>{
+export const AddQuestionButton=({onClick,text,icon,disable})=>{
     const classes = useStyles();
         return(
             <Button
             variant="contained"
             style={{backgroundColor:'#aab6fe'}}
             className={classes.button}
-            startIcon={<CloudUploadIcon />}
+            startIcon={icon}
             onClick={onClick}
+            disabled={disable}
           >
             {text}
           </Button>

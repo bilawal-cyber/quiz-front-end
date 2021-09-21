@@ -5,15 +5,19 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormControl from '@material-ui/core/FormControl';
 import FormLabel from '@material-ui/core/FormLabel';
 import TextField from '@material-ui/core/TextField';
+import { ListItem,List } from '@material-ui/core';
 
-export default function AddQuestion({getLevel, getQuestion, level ,validationError, setErrors,question}) {
+export default function AddQuestion({getLevel, getQuestion, level ,validationErrors, setErrors,question}) {
 
+  let key=0;
     const removeError=()=>{
-            setErrors(
-              (validationError.levelOne && validationError.levelOne.question)?
-                delete validationError.levelOne : ''
-              
-            )
+      setErrors( 
+          (validationErrors.question)?
+            validationErrors.map((err) => {
+              return err.name === 'question' ? delete err.name : ''
+             })
+          :''
+    )
     }
   
 
@@ -41,30 +45,26 @@ export default function AddQuestion({getLevel, getQuestion, level ,validationErr
       variant="outlined"
       type="string" 
       value={question}
-      error={(validationError.levelOne && validationError.levelOne.question)?true:false}
+      error={(validationErrors && validationErrors.name=='question')?true:false}
       onKeyUp={removeError}
        onChange={(e)=>getQuestion(e.target.value)}/>
        {
-         (validationError.levelOne && validationError.levelOne.question)? 
-         <label style={{color:'red'}}>
-                {validationError.levelOne.question}
-         </label>
-         :''
-       }
-              {
-         validationError.levelOne && validationError.levelOne.options? 
-         <label style={{color:'red'}}>
-                {validationError.levelOne.options}
-         </label>
-         :''
-       }
-
-        {
-         (validationError.levelTwo && validationError.levelTwo.question)? 
-         <label style={{color:'red'}}>
-                {validationError.levelTwo.question}
-         </label>
-         :''
+         (validationErrors.length>0)? 
+         
+                <List>
+                    {
+                    validationErrors.map(element => (
+                      <ListItem key={key=key+1}>
+                            <label style={{color:'red'}}>
+                            {element.message}
+                            </label>  
+                      </ListItem>     
+                      ))
+                  }
+                
+                </List>
+         
+         : ''
        }
 
     </FormControl>

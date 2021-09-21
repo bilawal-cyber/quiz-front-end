@@ -6,6 +6,7 @@ import LevelOne from './LevelOne';
 import axios from 'axios';
 import { FormControl,FormLabel,TextField } from '@material-ui/core';
 import { AddQuestionButton as UploadEmail} from '../Buttons';
+import ClassIcon from '@material-ui/icons/Class';
 
 // const drawerWidth = 240;
 
@@ -115,8 +116,11 @@ export default function PlayerGrid({base_url}) {
 
     const [email,setEmail] = useState('')
 
+    const [errors,setErrors] = useState({})
+
   const classes = useStyles();
       const getEmail=(v)=>{
+        setErrors({email:''})
         var validRegex = /[^@ \t\r\n]+@[^@ \t\r\n]+\.[^@ \t\r\n]+/;
         if (v.value.match(validRegex)) {
               setEmail(v.value)
@@ -134,7 +138,8 @@ export default function PlayerGrid({base_url}) {
         setlevel({one:true,two:false})                      
         })
         .catch((err)=>{
-            console.log(err.response)
+          console.log(err.response)  
+          // setErrors({...errors,email:err.response.data.errors.email.message})
         })
       }
 
@@ -149,9 +154,15 @@ export default function PlayerGrid({base_url}) {
        label="Type your email" 
       variant="outlined"
       type="string" 
-      error={false}
+      error={errors && errors.email ? true:false}
        onChange={(e)=>{getEmail(e.target)}}/>
-      <UploadEmail  text={'next'}  onClick={checkEmail}/>
+             {
+               errors && errors.email? 
+               <label style={{color:'red'}}>
+               {errors.email}
+        </label>:''
+       }
+      <UploadEmail  text={'take Quiz'}  icon={<ClassIcon />} onClick={checkEmail} disable={level.one}/>
     </FormControl>
       </Box>
 
