@@ -1,12 +1,12 @@
-import React, {useState} from 'react';
-import {makeStyles} from '@material-ui/core/styles';
+import React, { useState } from 'react';
+import { makeStyles } from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
 import List from '@material-ui/core/List';
 import AddQuestion from './AddQuestion'
 import AddOptions from './addOptions';
-import {Addicon, AddQuestionButton} from '../Buttons';
+import { Addicon, AddQuestionButton } from '../Buttons';
 import axios from 'axios';
-import {Grid} from '@material-ui/core';
+import { Grid } from '@material-ui/core';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import Checkbox from '@material-ui/core/Checkbox';
 import FormGroup from '@material-ui/core/FormGroup';
@@ -93,7 +93,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export default function AdminGrid({base_url}) {
+export default function AdminGrid({ base_url }) {
 
     const id = new Date().getTime()
     const [options, setOptions] = useState(
@@ -107,12 +107,12 @@ export default function AdminGrid({base_url}) {
     );
 
     const [Question, setQuestion] = useState('');
-    const [TrueFalse, setTrueFalse] = useState({opOne: false, opTwo: false})
+    const [TrueFalse, setTrueFalse] = useState({ opOne: false, opTwo: false })
 
     // const [finalState,setFinalState] = useState({})
 
     const [level, setLevel] = useState('');
-//choose option
+    //choose option
     const getLevel = (value) => {
 
 
@@ -125,13 +125,13 @@ export default function AdminGrid({base_url}) {
 
     const [progressBarShow, setProgessBarShow] = useState(false)
 
-//catch question and store 
+    //catch question and store 
     const getQuestion = (v) => {
         setQuestion(v)
     }
 
 
-//add options
+    //add options
     const addInputField = () => {
         // const id= new Date().getTime()
         const newOption = {
@@ -140,12 +140,12 @@ export default function AdminGrid({base_url}) {
             option: ''
         }
         setOptions(prevState => ([
-            ...prevState, {...newOption}
+            ...prevState, { ...newOption }
         ]));
     }
 
 
-//remove options
+    //remove options
     const removeInputField = (id) => {
         setOptions(prevState => (
             prevState.filter(f => f.index !== id)
@@ -154,53 +154,53 @@ export default function AdminGrid({base_url}) {
 
     }
 
-    
+
 
     const [errors, setErrors] = useState([]) //validation error storage
 
-//combine answer and questions
-    const validate=(data)=>{
-      if(!Question){
-        setErrors([...errors,{name:'frontEndEmptyQuestion',message:'please fill out question'}])
-        return false
-      }
-      else{
-        data.question=Question
-      }
-      if(level == 2){
-        if(!TrueFalse.opOne && !TrueFalse.opTwo){
-          setErrors([...errors,{name:'frontEndTrueFalse',message:'please choose right option'}])
-          return false
+    //combine answer and questions
+    const validate = (data) => {
+        if (!Question) {
+            setErrors([...errors, { name: 'frontEndEmptyQuestion', message: 'please fill out question' }])
+            return false
+        }
+        else {
+            data.question = Question
+        }
+        if (level == 2) {
+            if (!TrueFalse.opOne && !TrueFalse.opTwo) {
+                setErrors([...errors, { name: 'frontEndTrueFalse', message: 'please choose right option' }])
+                return false
+            }
+
         }
 
-      }
+        //MCQS validation
+        if (level == 1) {
+            data.answers = [...options]
 
-      //MCQS validation
-      if(level == 1){
-          data.answers = [ ...options ]
-
-          if(data.answers.length<=1){
-            setErrors([...errors,{name:'frontEndOptionsLenght',message:'atleast two option are required'}])
-            return false
-          }
+            if (data.answers.length <= 1) {
+                setErrors([...errors, { name: 'frontEndOptionsLenght', message: 'atleast two option are required' }])
+                return false
+            }
 
 
-          if(data.answers.filter(a => !a.option).length ){
-              setErrors([...errors,{name:'frontEndOptions',message:'please fill all options'}])
-              return false;
-          }
-         
-          if(data.answers.filter(a =>a.is_correct).length==0){
-            setErrors([...errors,{name:'frontEndCheck',message:'please check the correct one'}])
-            return false
-          }
-      }
-      else{
-          data.correct_answer = TrueFalse.opOne
-      }
-      return true
+            if (data.answers.filter(a => !a.option).length) {
+                setErrors([...errors, { name: 'frontEndOptions', message: 'please fill all options' }])
+                return false;
+            }
+
+            if (data.answers.filter(a => a.is_correct).length == 0) {
+                setErrors([...errors, { name: 'frontEndCheck', message: 'please check the correct one' }])
+                return false
+            }
+        }
+        else {
+            data.correct_answer = TrueFalse.opOne
+        }
+        return true
     }
-    
+
 
 
     const finalCall = () => {
@@ -209,35 +209,35 @@ export default function AdminGrid({base_url}) {
         }
         //validations start
         //question validation
-          let validation=validate(data)
-          if(validation){
-                    axios.post(base_url + '/createQuestion', data)
-                        .then((res) => {
-                            setOptions(
-                                [
-                                    {
-                                        index: id,
-                                        is_correct: false,
-                                        option: ''
-                                    },
-                                ]
-                            )
-                            setQuestion([])
-                            setTrueFalse({opOne: false, opTwo: false})
-                            setErrors('')
-                        })
-                        .catch((err) => {
-                            setErrors(err.response.data.error)
-                            console.log(err.response)
-                        })
-          }
+        let validation = validate(data)
+        if (validation) {
+            axios.post(base_url + '/createQuestion', data)
+                .then((res) => {
+                    setOptions(
+                        [
+                            {
+                                index: id,
+                                is_correct: false,
+                                option: ''
+                            },
+                        ]
+                    )
+                    setQuestion([])
+                    setTrueFalse({ opOne: false, opTwo: false })
+                    setErrors('')
+                })
+                .catch((err) => {
+                    setErrors(err.response.data.error)
+                    console.log(err.response)
+                })
+        }
 
 
 
     }
 
     const handleTrueFalse = (v) => {
-        (v.target.value === "opOne") ? setTrueFalse({opOne: true, opTwo: false}) : setTrueFalse({
+        (v.target.value === "opOne") ? setTrueFalse({ opOne: true, opTwo: false }) : setTrueFalse({
             opOne: false,
             opTwo: true
         })
@@ -256,7 +256,7 @@ export default function AdminGrid({base_url}) {
     return (
         <Grid item>
             <Box p={3} justifyContent="center"
-                 sx={{borderRadius: 16, width: 500}} style={box}
+                sx={{ borderRadius: 16, width: 500 }} style={box}
             >
                 <AddQuestion
                     getLevel={getLevel}
@@ -271,9 +271,9 @@ export default function AdminGrid({base_url}) {
                         <FormGroup aria-label="position" row>
                             <FormControlLabel
                                 value="opOne"
-                                control={<Checkbox style={{color: "#4b636e"}}
-                                                   onChange={(e) => handleTrueFalse(e)}
-                                                   checked={TrueFalse.opOne}
+                                control={<Checkbox style={{ color: "#4b636e" }}
+                                    onChange={(e) => handleTrueFalse(e)}
+                                    checked={TrueFalse.opOne}
                                 />
                                 }
                                 label="True"
@@ -281,38 +281,38 @@ export default function AdminGrid({base_url}) {
                             />
                             <FormControlLabel
                                 value="opTwo"
-                                control={<Checkbox style={{color: "#4b636e"}}
-                                                   onChange={(e) => handleTrueFalse(e)}/>}
+                                control={<Checkbox style={{ color: "#4b636e" }}
+                                    onChange={(e) => handleTrueFalse(e)} />}
                                 label="False"
                                 labelPlacement="start"
                                 checked={TrueFalse.opTwo}
                             />
                         </FormGroup>
-                        <AddQuestionButton onClick={finalCall} text={'upload'}/>
+                        <AddQuestionButton onClick={finalCall} text={'upload'} />
                     </>
                     : ''
                 }
             </Box>
             {
                 progressBarShow &&
-                <LinearProgress style={{padding: "2px", borderRadius: "16px"}}/>
+                <LinearProgress style={{ padding: "2px", borderRadius: "16px" }} />
             }
 
             {level === '1' ?
                 <Box style={box}
-                     className={classes.root}
-                     mt={1}
-                     p={3}
-                     sx={{borderRadius: 16, width: 500}}
-                     justifyContent="center">
-                    <Addicon onClickAdd={addInputField}/>
+                    className={classes.root}
+                    mt={1}
+                    p={3}
+                    sx={{ borderRadius: 16, width: 500 }}
+                    justifyContent="center">
+                    <Addicon onClickAdd={addInputField} />
                     <List>
                         <AddOptions options={options}
-                                    setProgessBarShow={setProgessBarShow}
-                                    onClick={removeInputField}
-                                    setOptions={setOptions}/>
+                            setProgessBarShow={setProgessBarShow}
+                            onClick={removeInputField}
+                            setOptions={setOptions} />
                         {options.length > 0 ?
-                            <AddQuestionButton onClick={finalCall} text={'upload'}/>
+                            <AddQuestionButton onClick={finalCall} text={'upload'} />
                             : 'Add options'}
                     </List>
                 </Box> : ''
