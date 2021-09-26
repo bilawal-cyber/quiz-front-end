@@ -31,7 +31,7 @@ export default function AddOptions({ options, onClick, setOptions, setProgessBar
     setProgessBarShow(true)
     setInterval(() => {
       setProgessBarShow(false);
-    }, 2000);
+    }, 1000);
   }, [setProgessBarShow])
 
 

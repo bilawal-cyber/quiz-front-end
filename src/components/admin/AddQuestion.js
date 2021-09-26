@@ -12,14 +12,11 @@ export default function AddQuestion({ getLevel, getQuestion, level, validationEr
   let key = 0;
   const removeError = () => {
     setErrors(
-      (validationErrors.question) ?
         validationErrors.map((err) => {
-          return err.name === 'question' ? delete err.name : ''
+          return err.name === 'frontEndEmptyQuestion' ? delete err.name : err
         })
-        : ''
     )
   }
-
 
   return (
     <FormControl component="fieldset" fullWidth sx={{ m: 5 }}>
@@ -45,25 +42,22 @@ export default function AddQuestion({ getLevel, getQuestion, level, validationEr
         variant="outlined"
         type="string"
         value={question}
-        error={(validationErrors && validationErrors.name == 'question') ? true : false}
+        error={(validationErrors && validationErrors.filter(e=>e.name==="frontEndEmptyQuestion").length>0) ? true : false}
         onKeyUp={removeError}
         onChange={(e) => getQuestion(e.target.value)} />
       {
-        (validationErrors.length > 0) ?
-
+        (validationErrors) ?
           <List>
             {
               validationErrors.map(element => (
                 <ListItem key={key = key + 1}>
                   <label style={{ color: 'red' }}>
-                    {element.message}
+                    {element.message} 
                   </label>
                 </ListItem>
               ))
             }
-
           </List>
-
           : ''
       }
 

@@ -38,7 +38,7 @@ export default function PlayerGrid({ base_url }) {
       setErrors("");
     }
   };
-  const isEmailValid = () => {  //validation before sending to server
+  const isEmailValid = () => { 
     if (!email) {
       setErrors({ name: "email", message: "email is required" });
       return false;
@@ -134,6 +134,8 @@ export default function PlayerGrid({ base_url }) {
             errors={errors}
             setErrors={setErrors}
             setlevel={setlevel}
+            levelOne={levelOne}
+            email={email}
           />
         </Box>
       )}

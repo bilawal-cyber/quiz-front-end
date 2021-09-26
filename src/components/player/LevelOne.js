@@ -26,22 +26,22 @@ const LevelOne = ({ levelOne, setLevelOne, errors, setErrors,setlevel }) => {
     ))
   }
   const validateOptions=()=>{
-      levelOne.every(element => {
-            let length = element.answers.length
-            let arr=[]
+      levelOne.every((element,index,array) => {
+            let length = element.answers.length //storing false options
+            let arr=[] 
             element.answers.forEach(a=>{
               if(a.is_correct===false){
-                arr.push(a.option)
+                arr.push(a.option) //storing not selected options
               }
             })
-            if(length===arr.length){
+            if(length===arr.length){ //if option is not selected
               setErrors({name:'optionMissing',message:'fill out all options'})
               return false
             }
-            if(arr.length>1){
-              console.log(length,arr.length)
-              setlevel({ one: false, two: true }) //toggle set to MCQS)
+            if(index === array.length - 1){
               setErrors('')
+              console.log('one')
+              setlevel({ one: false, two: true }) //toggle set to MCQS
             }
             return true
             
