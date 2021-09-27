@@ -7,6 +7,7 @@ import SkipNextIcon from "@material-ui/icons/SkipNext";
 import { RadioGroup } from "@material-ui/core";
 import Radio from "@material-ui/core/Radio";
 import { useState } from "react";
+import axios from "axios";
 
 const LevelTwo = ({
   levelTwo,
@@ -15,8 +16,13 @@ const LevelTwo = ({
   setErrors,
   levelOne,
   email,
+  levelOneCorrectAnswers,
+  levelTwoCorrectAnswers,
+  base_url,
+  setCurrentTab
 }) => {
   const [response, setResponse] = useState([]);
+  const [score,setScore] =  useState(0)
   const handleChange = (v, id) => {
     setLevelTwo(
       levelTwo.map((q) => {
@@ -33,32 +39,54 @@ const LevelTwo = ({
       if (index === array.length - 1) {
         setErrors("");
         getUserData();
+        sendUserData();
       }
       return true;
     });
   };
   const getUserData = () => {
     setResponse([]);
+    setScore(0)
     levelOne.forEach((ob) => {
       let userAnswer = ob.answers.filter((ans) => ans.is_correct === true);
+      let correctAnswers=levelOneCorrectAnswers.filter((ans)=>ans.is_correct==="true")
+      userAnswer=userAnswer[0]
+      let is_correct=correctAnswers.filter(e=> e.answers_id===userAnswer._id)
       setResponse((prev) => [
         ...prev,
         {
           question_id: ob._id,
-          answer_id: userAnswer[0]._id,
+          answer_id: userAnswer._id,
+          is_correct:(is_correct.length>0) ? is_correct[0].is_correct : false
         },
       ]);
+      if(is_correct.length>0){ setScore(prev=>prev+10)}
     });
+
+
     levelTwo.forEach((ob) => {
+        let is_correct=levelTwoCorrectAnswers.filter(e=>e.question_id===ob._id)
         setResponse((prev) => [
           ...prev,
           {
             question_id: ob._id,
-            answer_id: ob.correct_answer,
+            answer_id: null,
+            is_correct:(is_correct[0].is_correct===ob.correct_answer) ? true : false
           },
         ]);
+        if(is_correct[0].is_correct===ob.correct_answer){setScore(prev=>prev+10)}
       });
   };
+  const sendUserData=()=>{
+      let data = {
+        email : email,
+        score : score,
+        responses : response
+      }
+      axios.post(base_url+'/user/Answers',data)
+                    .then(res=>setCurrentTab("three"))
+                        .catch(err=>console.log(err))
+  }
 
   return (
     <List

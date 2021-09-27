@@ -8,7 +8,7 @@ import { FormControl, FormLabel, TextField } from "@material-ui/core";
 import { AddQuestionButton as UploadEmail } from "../Buttons";
 import ClassIcon from "@material-ui/icons/Class";
 
-export default function PlayerGrid({ base_url }) {
+export default function PlayerGrid({ base_url ,setCurrentTab}) {
   const box = {
     background: "#d1d9ff",
     border: "1px solid rgb(19, 47, 76)",
@@ -22,9 +22,9 @@ export default function PlayerGrid({ base_url }) {
     two: false,
   });
 
-  const levelOneCorrectAnswers = []
+  const [levelOneCorrectAnswers,setLevelOneCorrectAnswers] = useState([])
 
-  const levelTwoCorrectAnswers = []
+  const [levelTwoCorrectAnswers,setLevelTwoCorrectAnswers] = useState([])
 
   const [email, setEmail] = useState("");
 
@@ -49,20 +49,27 @@ export default function PlayerGrid({ base_url }) {
     axios
       .get(base_url + "/getQuestions")
       .then((res) => {
-
         res.data.levelOne.forEach(q => {
           q.answers.forEach(a => {
-            levelOneCorrectAnswers.push({ ///store MCQS correct answers
-              answers_id: a._id,
-              is_correct: a.is_correct
-            })
+            setLevelOneCorrectAnswers(prev=>([
+              ...prev,
+              { ///store MCQS correct answers
+                answers_id: a._id,
+                is_correct: a.is_correct,
+                option: a.option
+              }
+            ]))
           })
         });
         res.data.levelTwo.forEach(q => { //storing True/False correct options
-          levelTwoCorrectAnswers.push({
-            question_id: q._id,
-            is_correct: q.correct_answer,
-          })
+          setLevelTwoCorrectAnswers(prev=>([
+            ...prev,
+            {
+              question_id: q._id,
+              is_correct: q.correct_answer,
+            }
+          ])
+          )
         });
         let dataOne = res.data.levelOne.map((q) => {
           let answers = q.answers.map((a) => {
@@ -136,6 +143,10 @@ export default function PlayerGrid({ base_url }) {
             setlevel={setlevel}
             levelOne={levelOne}
             email={email}
+            levelOneCorrectAnswers={levelOneCorrectAnswers}
+            levelTwoCorrectAnswers={levelTwoCorrectAnswers}
+            base_url = {base_url}
+            setCurrentTab={setCurrentTab}
           />
         </Box>
       )}

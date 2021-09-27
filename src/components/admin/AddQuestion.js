@@ -11,11 +11,14 @@ export default function AddQuestion({ getLevel, getQuestion, level, validationEr
 
   let key = 0;
   const removeError = () => {
-    setErrors(
+    if(validationErrors){
+      setErrors(
         validationErrors.map((err) => {
           return err.name === 'frontEndEmptyQuestion' ? delete err.name : err
         })
     )
+    }
+
   }
 
   return (
