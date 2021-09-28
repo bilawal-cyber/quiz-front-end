@@ -45,22 +45,15 @@ export default function PlayerGrid({ base_url ,setCurrentTab,setResults}) {
     }
     return true
   }
+
   const getAllQuestions = () => {
     axios
       .get(base_url + "/getQuestions")
       .then((res) => {
-        res.data.levelOne.forEach(q => {
-          q.answers.forEach(a => {
-            setLevelOneCorrectAnswers(prev=>([
-              ...prev,
-              { ///store MCQS correct answers
-                answers_id: a._id,
-                is_correct: a.is_correct,
-                option: a.option
-              }
-            ]))
-          })
-        });
+
+        const allAnswers = (res.data.levelOne.map(q => q.answers)).flat(1)
+        setLevelOneCorrectAnswers(prev =>[...allAnswers])
+
         res.data.levelTwo.forEach(q => { //storing True/False correct options
           setLevelTwoCorrectAnswers(prev=>([
             ...prev,

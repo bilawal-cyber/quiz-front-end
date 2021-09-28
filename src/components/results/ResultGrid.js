@@ -40,32 +40,34 @@ export default function ResultGrid({result}) {
 
   return (
     <Grid item  >
+    {result.length ?
     <Box   p={3} 
-     sx={{ borderRadius: 16 }} style={box}>
-      <TableContainer component={Paper} style={{background:'#d1d9ff'}}>
-      <h3>your score</h3>
-      <Table className={classes.table}  aria-label="simple table">
-        <TableHead>
-          <TableRow>
-            <TableCell>question</TableCell>
-            <TableCell align="right">your answer</TableCell>
-            <TableCell align="right">Is Correct</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {result.map((r) => (
-            <TableRow key={r.id}>
-              <TableCell component="th" scope="row">
-                <h5>hel</h5>
-              </TableCell>
-              {/* <TableCell align="right">{r.answer_id.option}</TableCell>
-              <TableCell align="right">{r.is_correct}</TableCell> */}
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
-    </Box>
+    sx={{ borderRadius: 16 }} style={box}>
+     <TableContainer component={Paper} style={{background:'#d1d9ff'}}>
+     <h3>your score </h3>
+     <Table className={classes.table}  aria-label="simple table">
+       <TableHead>
+         <TableRow>
+           <TableCell>question</TableCell>
+           <TableCell align="right">your answer</TableCell>
+           <TableCell align="right">Is Correct</TableCell>
+         </TableRow>
+       </TableHead>
+       <TableBody>
+         {result.map((r) => (
+           <TableRow key={r._id}>
+             <TableCell component="th" scope="row">
+               <h5>hel</h5>
+             </TableCell>
+             {/* <TableCell align="right">{r.answer_id.option}</TableCell>
+             <TableCell align="right">{r.is_correct}</TableCell> */}
+           </TableRow>
+         ))}
+       </TableBody>
+     </Table>
+   </TableContainer>
+   </Box> : ''
+   }
     </Grid>
   );
 }
