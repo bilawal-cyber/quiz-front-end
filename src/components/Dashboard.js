@@ -88,6 +88,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Dashboard() {
   const [currentTab, setCurrentTab] = useState('one');
+  const [result,setResults] =  useState([])
   const base_url='http://127.0.0.1:5000/api';
 
 const handleChange = (event, newValue) => {
@@ -130,9 +131,15 @@ const box={
                 
                   {(currentTab==='one') ? <AdminGrid base_url={base_url}/> : ''}
                
-                 {(currentTab==='two') ? <PlayerGrid base_url={base_url} setCurrentTab={setCurrentTab}/> : ''}
+                 {(currentTab==='two') ? <PlayerGrid base_url={base_url}
+                  setCurrentTab={setCurrentTab}
+                  setResults={setResults}
+                   /> : ''}
              
-                 {(currentTab==='three') ? <ResultGrid base_url={base_url} /> : ''}
+                 {(currentTab==='three') ? <ResultGrid 
+                 base_url={base_url} 
+                 result={result}
+                 /> : ''}
                
                 </Grid>
         </Container>

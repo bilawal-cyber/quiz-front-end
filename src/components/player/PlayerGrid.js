@@ -8,7 +8,7 @@ import { FormControl, FormLabel, TextField } from "@material-ui/core";
 import { AddQuestionButton as UploadEmail } from "../Buttons";
 import ClassIcon from "@material-ui/icons/Class";
 
-export default function PlayerGrid({ base_url ,setCurrentTab}) {
+export default function PlayerGrid({ base_url ,setCurrentTab,setResults}) {
   const box = {
     background: "#d1d9ff",
     border: "1px solid rgb(19, 47, 76)",
@@ -147,6 +147,7 @@ export default function PlayerGrid({ base_url ,setCurrentTab}) {
             levelTwoCorrectAnswers={levelTwoCorrectAnswers}
             base_url = {base_url}
             setCurrentTab={setCurrentTab}
+            setResults={setResults}
           />
         </Box>
       )}

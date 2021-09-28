@@ -19,7 +19,8 @@ const LevelTwo = ({
   levelOneCorrectAnswers,
   levelTwoCorrectAnswers,
   base_url,
-  setCurrentTab
+  setCurrentTab,
+  setResults
 }) => {
   const [response, setResponse] = useState([]);
   const [score,setScore] =  useState(0)
@@ -45,8 +46,6 @@ const LevelTwo = ({
     });
   };
   const getUserData = () => {
-    setResponse([]);
-    setScore(0)
     levelOne.forEach((ob) => {
       let userAnswer = ob.answers.filter((ans) => ans.is_correct === true);
       let correctAnswers=levelOneCorrectAnswers.filter((ans)=>ans.is_correct==="true")
@@ -84,7 +83,10 @@ const LevelTwo = ({
         responses : response
       }
       axios.post(base_url+'/user/Answers',data)
-                    .then(res=>setCurrentTab("three"))
+                    .then(res=>{
+                      setCurrentTab("three")
+                      setResults(res.data)
+                    })
                         .catch(err=>console.log(err))
   }
 
