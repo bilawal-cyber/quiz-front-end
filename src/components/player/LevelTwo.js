@@ -36,7 +36,7 @@ const LevelTwo = ({
     const handleChange = (v, id) => {
         setLevelTwo(
             levelTwo.map((q) => {
-                return q._id === id ? {...q, correct_answer: v} : q;
+                return q._id === id ? {...q, correct_answer: v === "1"} : q;
             })
         );
     };
@@ -54,7 +54,6 @@ const LevelTwo = ({
         levelOne.forEach((ob) => {
             let userAnswer = ob.answers.filter((ans) => ans.is_correct === true)[0];
             let correctAnswer = levelOneCorrectAnswers.filter(a => a._id === userAnswer._id)[0]
-
             setResponse((prev) => {
 
                 return [
@@ -73,16 +72,16 @@ const LevelTwo = ({
 
 
         levelTwo.forEach((ob) => {
-            let is_correct = levelTwoCorrectAnswers.filter(e => e.question_id === ob._id)
+            let is_correct = levelTwoCorrectAnswers.filter(e => e._id === ob._id)[0]
             setResponse((prev) => [
                 ...prev,
                 {
                     question_id: ob._id,
                     answer_id: null,
-                    is_correct: (is_correct[0].is_correct === ob.correct_answer) ? true : false
+                    is_correct: (is_correct.correct_answer === ob.correct_answer) ? true : false
                 },
             ]);
-            if (is_correct[0].is_correct === ob.correct_answer) {
+            if (is_correct.correct_answer === ob.correct_answer) {
                 setScore(prev => prev + 10)
             }
         });
@@ -129,12 +128,12 @@ const LevelTwo = ({
                                         onChange={(e) => handleChange(e.target.value, ob._id)}
                                     >
                                         <FormControlLabel
-                                            value="true"
+                                            value="1"
                                             control={<Radio/>}
                                             label="True"
                                         />
                                         <FormControlLabel
-                                            value="false"
+                                            value="0"
                                             control={<Radio/>}
                                             label="False"
                                         />

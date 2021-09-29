@@ -52,18 +52,10 @@ export default function PlayerGrid({ base_url ,setCurrentTab,setResults}) {
       .then((res) => {
 
         const allAnswers = (res.data.levelOne.map(q => q.answers)).flat(1)
-        setLevelOneCorrectAnswers(prev =>[...allAnswers])
+        setLevelOneCorrectAnswers([...allAnswers])
 
-        res.data.levelTwo.forEach(q => { //storing True/False correct options
-          setLevelTwoCorrectAnswers(prev=>([
-            ...prev,
-            {
-              question_id: q._id,
-              is_correct: q.correct_answer,
-            }
-          ])
-          )
-        });
+        let levelTwoAllAns = res.data.levelTwo
+        setLevelTwoCorrectAnswers(levelTwoAllAns)
         let dataOne = res.data.levelOne.map((q) => {
           let answers = q.answers.map((a) => {
             return { ...a, is_correct: false };  //making all options false before rendering
@@ -73,6 +65,7 @@ export default function PlayerGrid({ base_url ,setCurrentTab,setResults}) {
         let dataTwo = res.data.levelTwo.map((q) => {
           return { ...q, correct_answer:null }
         });
+        
         setLevelOne(dataOne); setLevelTwo(dataTwo); //manuplated data
         setlevel({ one: true, two: false }); //toggle set to MCQS
       })

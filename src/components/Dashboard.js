@@ -139,6 +139,7 @@ const box={
                  {(currentTab==='three') ? <ResultGrid 
                  base_url={base_url} 
                  result={result}
+                 setResults={setResults}
                  /> : ''}
                
                 </Grid>
