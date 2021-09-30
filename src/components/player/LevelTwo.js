@@ -52,8 +52,8 @@ const LevelTwo = ({
     };
     const getUserData = () => {
         levelOne.forEach((ob) => {
-            let userAnswer = ob.answers.filter((ans) => ans.is_correct === true)[0];
-            let correctAnswer = levelOneCorrectAnswers.filter(a => a._id === userAnswer._id)[0]
+            let userAnswer = ob.answers.filter((ans) => ans.userAns === true)[0];
+            let correctAnswer = ob.answers.filter(a => a._id === userAnswer._id)[0]
             setResponse((prev) => {
 
                 return [
@@ -72,15 +72,15 @@ const LevelTwo = ({
 
 
         levelTwo.forEach((ob) => {
-            let is_correct = levelTwoCorrectAnswers.filter(e => e._id === ob._id)[0]
+            let is_correct = ob.filter(e => e._id === ob._id)[0]
             setResponse((prev) => [
                 ...prev,
                 {
                     question_id: ob._id,
-                    is_correct: (is_correct.correct_answer === ob.correct_answer) ? true : false
+                    is_correct: (is_correct.userAns === ob.correct_answer) ? true : false
                 },
             ]);
-            if (is_correct.correct_answer === ob.correct_answer) {
+            if (is_correct.userAns === ob.correct_answer) {
                 setScore(prev => prev + 10)
             }
         });
