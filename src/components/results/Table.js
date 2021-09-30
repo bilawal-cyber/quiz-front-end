@@ -25,23 +25,40 @@ export default function ResultGrid({result}) {
       },
     });
     const classes = useStyles();
-
+    console.log(result[0].userAnwers.map(e=>{
+      return e.notSelected.length ? 
+      e.notSelected.map(n=>(n.option)?n.option:'') :''
+    }
+      ))
+ 
   return (
     <div className={classes.root}>
-    <List component="nav" aria-label="secondary mailbox folder">
-      <ListItem>
-        <ListItemText primary="Trash" />
-        <ListItemText primary="Trash" />
-        <ListItemText primary="Trash" />
-      </ListItem>
-    </List>
-    <List component="nav" aria-label="main mailbox folders">
-    <Divider />
-      <ListItem>
-        <ListItemText primary="{correctone}" />
-      </ListItem>
-      
-    </List>
+      {
+        result[0].userAnwers.map(e=>(
+          <List component="nav" aria-label="secondary mailbox folder" key={e._id}>
+          <ListItem>
+            <ListItemText primary={e.question_id.question} />
+          </ListItem>
+          {/* {
+              (e.notSelected.length>0)?
+              e.notSelected.map(n=>{
+                  n.option.map(o=>
+                    <ListItem>
+                    <ListItemText primary={o} />
+                  </ListItem>
+                  )
+              }):''
+          } */}
+        <Divider />
+          <ListItem>
+            <ListItemText primary={
+              (e.selected)?
+             e.selected.option:""} />
+          </ListItem>
+          
+        </List>
+        ))
+        }
   </div>
   //   <TableContainer component={Paper} style={{background:'#d1d9ff'}}>
   //   <h3>your score {result[0].score}</h3>
