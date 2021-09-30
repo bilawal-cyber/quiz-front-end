@@ -95,8 +95,8 @@ const LevelTwo = ({
         }
         axios.post(base_url + '/user/Answers', data)
             .then(res => {
-                setCurrentTab("three")
                 setResults(res.data)
+                setCurrentTab("three")
             })
             .catch(err => console.log(err))
     }

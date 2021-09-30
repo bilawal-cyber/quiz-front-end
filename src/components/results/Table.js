@@ -1,22 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
-import Divider from '@material-ui/core/Divider';
-import InboxIcon from '@material-ui/icons/Inbox';
-import DraftsIcon from '@material-ui/icons/Drafts';
-// import Box from '@material-ui/core/Box';
-// import { Grid } from '@material-ui/core';
-// import Table from '@material-ui/core/Table';
-// import TableBody from '@material-ui/core/TableBody';
-// import TableCell from '@material-ui/core/TableCell';
-// import TableContainer from '@material-ui/core/TableContainer';
-// import TableHead from '@material-ui/core/TableHead';
-// import TableRow from '@material-ui/core/TableRow';
-// import Paper from '@material-ui/core/Paper';
-// import axios from 'axios';
+import Mcqs from '../common/Mcqs';
+import TrueFalse from '../common/TrueFalse'
 
 export default function ResultGrid({result}) {
     const useStyles = makeStyles({
@@ -25,40 +10,20 @@ export default function ResultGrid({result}) {
       },
     });
     const classes = useStyles();
-    console.log(result[0].userAnwers.map(e=>{
-      return e.notSelected.length ? 
-      e.notSelected.map(n=>(n.option)?n.option:'') :''
-    }
-      ))
- 
   return (
     <div className={classes.root}>
-      {
+      {/* {
         result[0].userAnwers.map(e=>(
-          <List component="nav" aria-label="secondary mailbox folder" key={e._id}>
-          <ListItem>
-            <ListItemText primary={e.question_id.question} />
-          </ListItem>
-          {/* {
-              (e.notSelected.length>0)?
-              e.notSelected.map(n=>{
-                  n.option.map(o=>
-                    <ListItem>
-                    <ListItemText primary={o} />
-                  </ListItem>
-                  )
-              }):''
-          } */}
-        <Divider />
-          <ListItem>
-            <ListItemText primary={
-              (e.selected)?
-             e.selected.option:""} />
-          </ListItem>
-          
-        </List>
+           (!e.selected)?
+           <Mcqs 
+           key={e._id}
+           ob={e}
+           question={e.question_id.question}
+           answers={[e.selected]}
+           /> : 
+           <TrueFalse />
         ))
-        }
+        } */}
   </div>
   //   <TableContainer component={Paper} style={{background:'#d1d9ff'}}>
   //   <h3>your score {result[0].score}</h3>

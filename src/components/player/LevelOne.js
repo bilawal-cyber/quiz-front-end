@@ -6,6 +6,7 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormControl from '@material-ui/core/FormControl';
 import {AddQuestionButton as NextButton} from "../Buttons";
 import SkipNextIcon from '@material-ui/icons/SkipNext';
+import Mcqs from '../common/Mcqs'
 
 
 const LevelOne = ({levelOne, setLevelOne, errors, setErrors, setlevel}) => {
@@ -54,32 +55,15 @@ const LevelOne = ({levelOne, setLevelOne, errors, setErrors, setlevel}) => {
             }
             {
                 (levelOne.length) ?
-                    levelOne.map((ob) => (
-                        <List key={ob._id}>
-                            <ListItemText className='MuiListItemText-dense' primary={ob.question + "?"}/>
-                            <ListItem>
-                                {
-                                    ob.answers.map((a) => (
-                                        <FormControl key={a._id} component="fieldset">
-                                            <FormGroup aria-label="position" row>
-                                                <FormControlLabel
-                                                    value="end"
-                                                    control=
-                                                        {
-                                                            <Checkbox color="primary"
-                                                                      checked={a.is_correct}
-                                                                      onChange={(e) => handleChange(a._id, ob._id)}/>
-                                                        }
-                                                    label={a.option}
-                                                    labelPlacement="end"
-                                                />
-                                            </FormGroup>
-                                        </FormControl>
-                                    ))
-                                }
-                            </ListItem>
-                        </List>
-                    )) : ''
+                levelOne.map((ob) => (
+                    <Mcqs 
+                    key={ob._id}
+                     handleChange={handleChange} 
+                     ob={ob}
+                     answers={ob.answers}
+                     /> 
+                    ))
+                    : ''
             }
             <NextButton onClick={() => {
                 validateOptions()
