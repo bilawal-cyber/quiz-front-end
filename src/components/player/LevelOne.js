@@ -16,7 +16,7 @@ const LevelOne = ({levelOne, setLevelOne, errors, setErrors, setlevel}) => {
             prevState.map((q) => {
                     if (q._id === q_id) {
                         var answers = q.answers.map((a) => {
-                            return {...a, is_correct: a._id === answer_id}
+                            return {...a, userAns: a._id === answer_id}
                         })
                     } else {
                         return q
@@ -28,7 +28,7 @@ const LevelOne = ({levelOne, setLevelOne, errors, setErrors, setlevel}) => {
     }
     const validateOptions = () => {
 
-        if(levelOne.filter(q => !q.answers.filter(a => a.is_correct === true).length).length){
+        if(levelOne.filter(q => !q.answers.filter(a => a.userAns === true).length).length){
             setErrors({name: 'optionMissing', message: 'fill out all options'})
             return false
         }

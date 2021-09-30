@@ -36,12 +36,12 @@ const LevelTwo = ({
     const handleChange = (v, id) => {
         setLevelTwo(
             levelTwo.map((q) => {
-                return q._id === id ? {...q, correct_answer: v === "1"} : q;
+                return q._id === id ? {...q, userAns: v === "1"} : q;
             })
         );
     };
     const validateOptions = () => {
-        if(levelTwo.filter(e => e.correct_answer === null).length){
+        if(levelTwo.filter(e => e.userAns === null).length){
             setErrors({name: "trueFalse", message: "fill out all options"});
             return;
         }

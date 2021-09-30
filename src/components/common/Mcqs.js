@@ -26,7 +26,7 @@ const Mcqs = ({
                                                 control=
                                                     {
                                                         <Checkbox color="primary"
-                                                                  checked={a.is_correct}
+                                                                  checked={a.userAns}
                                                                   onChange={(e) => handleChange(a._id, ob._id)}/>
                                                     }
                                                 label={a.option}

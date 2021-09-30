@@ -58,12 +58,12 @@ export default function PlayerGrid({ base_url ,setCurrentTab,setResults}) {
         // setLevelTwoCorrectAnswers(levelTwoAllAns)
         let dataOne = res.data.levelOne.map((q) => {
           let answers = q.answers.map((a) => {
-            return { ...a, is_correct: false };  //adding user Answer
+            return { ...a, userAns: null };  //adding user Answer
           });
           return { ...q, answers };
         });
         let dataTwo = res.data.levelTwo.map((q) => {
-          return { ...q, correct_answer:null }
+          return { ...q, userAns:null }
         });
         
         setLevelOne(dataOne); setLevelTwo(dataTwo); //manuplated data
