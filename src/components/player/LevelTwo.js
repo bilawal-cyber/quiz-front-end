@@ -53,7 +53,7 @@ const LevelTwo = ({
     const getUserData = () => {
         levelOne.forEach((ob) => {
             let userAnswer = ob.answers.filter((ans) => ans.is_correct === true)[0];
-            let notSelectByUser =ob.answers.filter((ans) => ans.is_correct === false);
+            // let notSelectByUser =ob.answers.filter((ans) => ans.is_correct === false);
             let correctAnswer = levelOneCorrectAnswers.filter(a => a._id === userAnswer._id)[0]
             setResponse((prev) => {
 
@@ -63,7 +63,7 @@ const LevelTwo = ({
                         question_id: ob._id,
                         selected: userAnswer._id,
                         is_correct: correctAnswer.is_correct,
-                        notSelected:notSelectByUser.map(e=>e._id)
+                        // notSelected:notSelectByUser.map(e=>e._id)
                     },
                 ]
             });
