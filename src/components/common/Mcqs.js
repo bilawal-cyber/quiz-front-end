@@ -4,11 +4,34 @@ import Checkbox from '@material-ui/core/Checkbox';
 import FormGroup from '@material-ui/core/FormGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormControl from '@material-ui/core/FormControl';
+import { withStyles } from '@material-ui/core/styles';
+import { green } from '@material-ui/core/colors';
+
+const GreenCheckbox = withStyles({
+    root: {
+      color: green[400],
+      '&$checked': {
+        color: green[600],
+      },
+    },
+    checked: {},
+  })((props) => <Checkbox color="default" {...props} />);
+
+  const RedCheckbox = withStyles({
+    root: {
+      color: green[400],
+      '&$checked': {
+        color: '#ff5722',
+      },
+    },
+    checked: {},
+  })((props) => <Checkbox color="default" {...props} />);
 
 const Mcqs = ({
     handleChange,
     ob,
-    answers
+    answers,
+    identity
 }) => {
     return (
         <div>
@@ -25,9 +48,35 @@ const Mcqs = ({
                                                 value="end"
                                                 control=
                                                     {
+                                                        (identity==='1')?
                                                         <Checkbox color="primary"
                                                                   checked={a.userAns}
                                                                   onChange={(e) => handleChange(a._id, ob._id)}/>
+                                                        :
+                                                        (a.userAns===true  && a.is_correct===true)?
+                                                        <GreenCheckbox
+                                                         checked={true}
+                                                         readOnly={true} />
+                                                            :
+                                                        (a.is_correct!==false)?
+                                                        <RedCheckbox
+                                                        checked={true}
+                                                        readOnly={true}
+                                                        /> :
+                                                        (a.userAns===true)?
+                                                        <Checkbox style={{color:"#ff1744"}}
+                                                         checked={a.userAns}
+                                                         readOnly={true} 
+                                                         indeterminate
+                                                         />:
+                                                        <Checkbox color="primary"
+                                                        checked={false}
+                                                        readOnly={true}/>
+                                                        // :
+                                                        // <Checkbox style={{color:'pink'}}
+                                                        // checked={false}
+                                                        // readOnly={true}/>
+                                                    
                                                     }
                                                 label={a.option}
                                                 labelPlacement="end"

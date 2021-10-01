@@ -16,8 +16,6 @@ const LevelTwo = ({
                       setErrors,
                       levelOne,
                       email,
-                      levelOneCorrectAnswers,
-                      levelTwoCorrectAnswers,
                       base_url,
                       setCurrentTab,
                       setResults
@@ -29,8 +27,7 @@ const LevelTwo = ({
       setCount(prev=>prev+1)
     //   console.log(count)
       if(count===1){
-          console.log(response)
-        // sendUserData();
+        sendUserData();
       }
     },[response])
 
@@ -60,7 +57,7 @@ const LevelTwo = ({
                     ...prev,
                     {
                         question_id: ob._id,
-                        selected: userAnswer._id,
+                        userAns: userAnswer._id,
                         is_correct: userAnswer.is_correct===userAnswer.userAns,
                     },
                 ]
@@ -94,7 +91,7 @@ const LevelTwo = ({
         }
         axios.post(base_url + '/user/Answers', data)
             .then(res => {
-                setResults(res.data)
+                setResults({levelOne:levelOne,levelTwo:levelTwo,score:score})
                 setCurrentTab("three")
             })
             .catch(err => console.log(err))
