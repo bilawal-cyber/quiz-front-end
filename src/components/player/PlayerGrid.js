@@ -17,14 +17,11 @@ export default function PlayerGrid({ base_url ,setCurrentTab,setResults}) {
   const [levelOne, setLevelOne] = useState([]);
   const [levelTwo, setLevelTwo] = useState([]);
 
+
   const [level, setlevel] = useState({ //toggle b/w MCQS and True/False
     one: false,
     two: false,
   });
-
-  const [levelOneCorrectAnswers,setLevelOneCorrectAnswers] = useState([])
-
-  const [levelTwoCorrectAnswers,setLevelTwoCorrectAnswers] = useState([])
 
   const [email, setEmail] = useState("");
 
@@ -50,7 +47,6 @@ export default function PlayerGrid({ base_url ,setCurrentTab,setResults}) {
     axios
       .get(base_url + "/getQuestions")
       .then((res) => {
-
         // const allAnswers = (res.data.levelOne.map(q => q.answers)).flat(1)
         // setLevelOneCorrectAnswers([...allAnswers])
 
@@ -58,12 +54,12 @@ export default function PlayerGrid({ base_url ,setCurrentTab,setResults}) {
         // setLevelTwoCorrectAnswers(levelTwoAllAns)
         let dataOne = res.data.levelOne.map((q) => {
           let answers = q.answers.map((a) => {
-            return { ...a, userAns: null };  //adding user Answer
+            return { ...a, userAns: false };  //adding user Answer
           });
           return { ...q, answers };
         });
         let dataTwo = res.data.levelTwo.map((q) => {
-          return { ...q, userAns:null }
+          return { ...q, userAns:false }
         });
         
         setLevelOne(dataOne); setLevelTwo(dataTwo); //manuplated data
@@ -129,8 +125,6 @@ export default function PlayerGrid({ base_url ,setCurrentTab,setResults}) {
             setlevel={setlevel}
             levelOne={levelOne}
             email={email}
-            levelOneCorrectAnswers={levelOneCorrectAnswers}
-            levelTwoCorrectAnswers={levelTwoCorrectAnswers}
             base_url = {base_url}
             setCurrentTab={setCurrentTab}
             setResults={setResults}

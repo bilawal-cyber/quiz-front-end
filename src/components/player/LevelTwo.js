@@ -27,9 +27,10 @@ const LevelTwo = ({
     const [count,setCount] = useState(0)
     useEffect(()=>{
       setCount(prev=>prev+1)
-      console.log(count)
+    //   console.log(count)
       if(count===1){
-        sendUserData();
+          console.log(response)
+        // sendUserData();
       }
     },[response])
 
@@ -53,7 +54,6 @@ const LevelTwo = ({
     const getUserData = () => {
         levelOne.forEach((ob) => {
             let userAnswer = ob.answers.filter((ans) => ans.userAns === true)[0];
-            let correctAnswer = ob.answers.filter(a => a._id === userAnswer._id)[0]
             setResponse((prev) => {
 
                 return [
@@ -61,26 +61,25 @@ const LevelTwo = ({
                     {
                         question_id: ob._id,
                         selected: userAnswer._id,
-                        is_correct: correctAnswer.is_correct,
+                        is_correct: userAnswer.is_correct===userAnswer.userAns,
                     },
                 ]
             });
-            if (correctAnswer.is_correct) {
+            if (userAnswer.is_correct===userAnswer.userAns) {
                 setScore(prev => prev + 10)
             }
         });
 
 
         levelTwo.forEach((ob) => {
-            let is_correct = ob.filter(e => e._id === ob._id)[0]
             setResponse((prev) => [
                 ...prev,
                 {
                     question_id: ob._id,
-                    is_correct: (is_correct.userAns === ob.correct_answer) ? true : false
+                    is_correct: ob.correct_answer===ob.userAns
                 },
             ]);
-            if (is_correct.userAns === ob.correct_answer) {
+            if (ob.correct_answer===ob.userAns) {
                 setScore(prev => prev + 10)
             }
         });
