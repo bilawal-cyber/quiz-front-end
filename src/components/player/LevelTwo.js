@@ -1,13 +1,9 @@
-import {List, ListItem, ListItemText, ListSubheader} from "@material-ui/core";
-import FormGroup from "@material-ui/core/FormGroup";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import FormControl from "@material-ui/core/FormControl";
+import {List, ListSubheader} from "@material-ui/core";
 import {AddQuestionButton as SubmitAnswer} from "../Buttons";
 import SkipNextIcon from "@material-ui/icons/SkipNext";
-import {RadioGroup} from "@material-ui/core";
-import Radio from "@material-ui/core/Radio";
 import {useEffect, useState} from "react";
 import axios from "axios";
+import TrueFalse from "../common/TrueFalse";
 
 const LevelTwo = ({
                       levelTwo,
@@ -108,35 +104,12 @@ const LevelTwo = ({
             {errors ? <label style={{color: "red"}}>{errors.message}</label> : ""}
             {levelTwo.length
                 ? levelTwo.map((ob) => (
-                    <List key={ob._id}>
-                        <ListItemText
-                            className="MuiListItemText-dense"
-                            primary={ob.question + "?"}
-                        />
-                        <ListItem>
-                            <FormControl component="fieldset">
-                                <FormGroup aria-label="position" row>
-                                    <RadioGroup
-                                        row
-                                        aria-label="gender"
-                                        name="row-radio-buttons-group"
-                                        onChange={(e) => handleChange(e.target.value, ob._id)}
-                                    >
-                                        <FormControlLabel
-                                            value="1"
-                                            control={<Radio/>}
-                                            label="True"
-                                        />
-                                        <FormControlLabel
-                                            value="0"
-                                            control={<Radio/>}
-                                            label="False"
-                                        />
-                                    </RadioGroup>
-                                </FormGroup>
-                            </FormControl>
-                        </ListItem>
-                    </List>
+                    <TrueFalse
+                    ob={ob}
+                    handleChange={handleChange}
+                    key={ob._id}
+                    identity={'1'}
+                    />
                 ))
                 : ""}
             <SubmitAnswer

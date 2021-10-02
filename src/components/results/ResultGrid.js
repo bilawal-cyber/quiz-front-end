@@ -8,6 +8,7 @@ import { AddQuestionButton as GetResultButton } from "../Buttons";
 import ClassIcon from "@material-ui/icons/Class";
 import axios from 'axios';
 import Mcqs from '../common/Mcqs';
+import TrueFalse from '../common/TrueFalse';
 export default function ResultGrid({ result, setResults, base_url }) {
   // const [result,setResults] = useState([])
   const box = {
@@ -45,7 +46,8 @@ export default function ResultGrid({ result, setResults, base_url }) {
   return (
     <Grid item  >
       {
-        (result.levelOne) ?
+        (result.levelOne.length) ?
+        <>
           <Box p={3}
             sx={{ borderRadius: 16 }} style={box}>
               <h5>Score: {result.score}</h5>
@@ -60,7 +62,22 @@ export default function ResultGrid({ result, setResults, base_url }) {
                  /> 
                 ))
             }
-          </Box> :
+          </Box>
+           <Box  p={3}
+            sx={{ borderRadius: 16 }} style={box}>
+           {
+             result.levelTwo.map((ob) => (
+              <TrueFalse
+              ob={ob}
+              handleChange={()=>{}}
+              key={ob._id}
+              identity={'2'}
+              />
+          ))
+           }
+         </Box>
+          </>
+          :
           <Box p={3} sx={{ borderRadius: 16, width: 700 }} style={box}>
             <FormControl component="fieldset" fullWidth sx={{ m: 5 }}>
               <FormLabel component="legend">Email</FormLabel>
