@@ -34,7 +34,7 @@ const LevelTwo = ({
             })
         );
     };
-    const validateOptions = () => {
+    const submitResponse = () => {
         if(levelTwo.filter(e => e.userAns === null).length){
             setErrors({name: "trueFalse", message: "fill out all options"});
             return;
@@ -114,7 +114,7 @@ const LevelTwo = ({
                 : ""}
             <SubmitAnswer
                 onClick={() => {
-                    validateOptions();
+                    submitResponse();
                 }}
                 text={"Submit"}
                 icon={<SkipNextIcon/>}
