@@ -5,8 +5,6 @@ import FormGroup from "@material-ui/core/FormGroup";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import FormControl from "@material-ui/core/FormControl";
 import {List, ListItem, ListItemText, ListSubheader} from "@material-ui/core";
-import { withStyles } from '@material-ui/core/styles';
-import { green } from '@material-ui/core/colors';
 const TrueFalse = ({ob,handleChange,identity}) => {
    const wrong={
        color:'red'
@@ -47,17 +45,17 @@ const TrueFalse = ({ob,handleChange,identity}) => {
               >
                   <FormControlLabel
                       value="true"
-                      control={<Radio style={{color:ob.correct_answer && 'green'}}/>}
+                      control={<Radio style={{color:ob.correct_answer===ob.userAns?'green':''}}/>}
                       label="True"
-                      checked={ob.correct_answer}
-                      disabled={!ob.correct_answer}
+                      checked={ob.correct_answer===ob.userAns}
+                    //   disabled={ob.correct_answer!==ob.userAns}
                   />
                   <FormControlLabel
                       value="false"
-                      control={<Radio style={{color:!ob.correct_answer && 'red'}}/>}
+                      control={<Radio style={{color:ob.correct_answer!==ob.userAns? 'red':''}}/>}
                       label="False"
-                      checked={!ob.correct_answer}
-                      disabled={ob.correct_answer}
+                      checked={ob.correct_answer!==ob.userAns}
+                    //   disabled={ob.correct_answer===ob.userAns}
                   />
               </RadioGroup>
                     }

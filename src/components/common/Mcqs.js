@@ -17,16 +17,6 @@ const GreenCheckbox = withStyles({
     checked: {},
   })((props) => <Checkbox color="default" {...props} />);
 
-  const RedCheckbox = withStyles({
-    root: {
-      color: green[400],
-      '&$checked': {
-        color: '#ff5722',
-      },
-    },
-    checked: {},
-  })((props) => <Checkbox color="default" {...props} />);
-
 const Mcqs = ({
     handleChange,
     ob,
@@ -59,12 +49,12 @@ const Mcqs = ({
                                                          readOnly={true} />
                                                             :
                                                         (a.is_correct!==false)?
-                                                        <RedCheckbox
+                                                        <GreenCheckbox
                                                         checked={true}
                                                         readOnly={true}
                                                         /> :
                                                         (a.userAns===true)?
-                                                        <Checkbox style={{color:"#ff1744"}}
+                                                        <Checkbox style={{color:"red"}}
                                                          checked={a.userAns}
                                                          readOnly={true} 
                                                          indeterminate

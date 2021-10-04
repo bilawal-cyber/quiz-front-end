@@ -1,9 +1,5 @@
 import {List, ListItem, ListItemText, ListSubheader} from '@material-ui/core'
-import Checkbox from '@material-ui/core/Checkbox';
-import React, {useEffect, useState} from 'react'
-import FormGroup from '@material-ui/core/FormGroup';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import FormControl from '@material-ui/core/FormControl';
+import React from 'react'
 import {AddQuestionButton as NextButton} from "../Buttons";
 import SkipNextIcon from '@material-ui/icons/SkipNext';
 import Mcqs from '../common/Mcqs'

@@ -31,7 +31,7 @@ export default function ResultGrid({ result, setResults, base_url }) {
       return false;
     }
     axios.get(base_url + `/userData?email=${email}`)
-    .then(res => setResults(res.data))
+    .then(res => console.log(res.data))
       .catch(err => setErrors({ name: 'backend', message: err.response.data.emailNotExist }))
   }
 
@@ -46,7 +46,7 @@ export default function ResultGrid({ result, setResults, base_url }) {
   return (
     <Grid item  >
       {
-        (result.levelOne.length) ?
+        (result.levelOne) ?
         <>
           <Box p={3}
             sx={{ borderRadius: 16 }} style={box}>
