@@ -1,16 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
-import { Grid } from '@material-ui/core';
+import { Grid, ListItem } from '@material-ui/core';
 import Table from './Table'
 import { FormControl, FormLabel, TextField } from "@material-ui/core";
 import { AddQuestionButton as GetResultButton } from "../Buttons";
+import {List, ListSubheader} from "@material-ui/core";
 import ClassIcon from "@material-ui/icons/Class";
 import axios from 'axios';
 import Mcqs from '../common/Mcqs';
 import TrueFalse from '../common/TrueFalse';
 export default function ResultGrid({ result, setResults, base_url }) {
-  // const [result,setResults] = useState([])
+
+  const [AllRecords,setAllRecords] = useState([])
+
   const box = {
     background: "#d1d9ff",
     border: "1px solid rgb(19, 47, 76)"
@@ -25,13 +28,39 @@ export default function ResultGrid({ result, setResults, base_url }) {
       setErrors("");
     }
   };
-  const getResult = () => {
+
+  const getAllQuizes = () =>{
+      axios.get(base_url+`/user/all/records?email=${email}`)
+                .then(res=>setAllRecords(res.data))
+                    .catch(err=>console.log(err))
+  }
+
+  const getResult = (id) => {
     if (!email) {
       setErrors({ name: "email", message: "email is required" });
       return false;
     }
-    axios.get(base_url + `/userData?email=${email}`)
-    .then(res => console.log(res.data))
+    axios.get(base_url + `/userData?id=${id}`)
+    .then(res =>{
+      let backendDataOne = res.data[0].userAnwers.filter(u=>u.userAns)
+      let backendDatatwo =  res.data[0].userAnwers.filter(u=>!u.userAns)
+      let score = res.data[0].score
+ 
+        axios.get(base_url+'/getQuestions').then(res=>{
+          let levelOne=res.data.levelOne.map((q) => {
+            let answers = q.answers.map((a) => {
+              let selected = backendDataOne.filter(u=>u.userAns._id===a._id)
+              return { ...a, userAns:selected.length>0};  //adding user Answer
+            });
+            return { ...q, answers };
+          });
+          let levelTwo = res.data.levelTwo.map((q) => {
+            let selected = backendDatatwo.filter(e=>e.question_id._id===q._id)[0]
+            return { ...q, userAns: selected.is_correct?q.correct_answer:!q.correct_answer }
+          });
+          setResults({levelOne:levelOne,levelTwo:levelTwo,score:score})
+        }).catch(err=>console.log('2',err))
+      })
       .catch(err => setErrors({ name: 'backend', message: err.response.data.emailNotExist }))
   }
 
@@ -45,6 +74,37 @@ export default function ResultGrid({ result, setResults, base_url }) {
 
   return (
     <Grid item  >
+       {
+          (AllRecords.length)?
+          <Box  p={3}
+            sx={{ borderRadius: 16, width: 500 }} style={box}>
+        {
+              AllRecords.map(r=>(
+                <List key={r._id}
+                subheader={
+                    <ListSubheader component="div" id="nested-list-subheader">
+                        {r.createdAt}
+                        {r.score}
+                    </ListSubheader>
+                    
+                }
+            >
+              <ListItem>
+                    Score {r.score}
+              </ListItem>
+              <ListItem>
+              <GetResultButton
+                text={"see result"}
+                icon={<ClassIcon />}
+                onClick={()=>getResult(r._id)}
+              />
+              </ListItem>
+
+                  </List>
+              ))
+            }
+        </Box>:''
+        }
       {
         (result.levelOne) ?
         <>
@@ -98,11 +158,37 @@ export default function ResultGrid({ result, setResults, base_url }) {
               <GetResultButton
                 text={"Show Results"}
                 icon={<ClassIcon />}
-                onClick={getResult}
+                onClick={getAllQuizes}
               />
             </FormControl>
+            {/* {
+              AllRecords.map(r=>(
+                <List key={r._id}
+                subheader={
+                    <ListSubheader component="div" id="nested-list-subheader">
+                        {r.createdAt}
+                        {r.score}
+                    </ListSubheader>
+                    
+                }
+            >
+              <ListItem>
+                    Score {r.score}
+              </ListItem>
+              <ListItem>
+              <GetResultButton
+                text={"see result"}
+                icon={<ClassIcon />}
+                onClick={()=>getResult(r._id)}
+              />
+              </ListItem>
+
+                  </List>
+              ))
+            } */}
           </Box>
       }
+       
     </Grid>
   );
 }
