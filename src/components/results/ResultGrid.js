@@ -32,7 +32,7 @@ export default function ResultGrid({ result, setResults, base_url }) {
   const getAllQuizes = () =>{
       axios.get(base_url+`/user/all/records?email=${email}`)
                 .then(res=>setAllRecords(res.data))
-                    .catch(err=>console.log(err))
+                    .catch(err=>setErrors({ name: 'backend', message: err.response.data.emailNotExist }))
   }
 
   const getResult = (id) => {
