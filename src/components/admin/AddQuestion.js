@@ -7,7 +7,7 @@ import FormLabel from '@material-ui/core/FormLabel';
 import TextField from '@material-ui/core/TextField';
 import { ListItem, List } from '@material-ui/core';
 
-export default function AddQuestion({ getLevel, getQuestion, level, validationErrors, setErrors, question }) {
+export default function AddQuestion({ getLevel, getQuestion, level, validationErrors, setErrors, question, edit }) {
 
   let key = 0;
   const removeError = () => {
@@ -23,23 +23,28 @@ export default function AddQuestion({ getLevel, getQuestion, level, validationEr
 
   return (
     <FormControl component="fieldset" fullWidth sx={{ m: 5 }}>
-      <FormLabel component="legend">Choose Level</FormLabel>
-      <RadioGroup row aria-label="position"
-        name="position" defaultValue="top"
-        onChange={(event) => getLevel(event.target.value)}>
-        <FormControlLabel
-          value={(level === '1') ? level : '1'}
-          control={<Radio color="default" />}
-          label="One"
-          labelPlacement="start"
-        />
-        <FormControlLabel
-          value={(level === '2') ? level : '2'}
-          control={<Radio color="default" />}
-          label="Two"
-          labelPlacement="start"
-        />
-      </RadioGroup>
+        {
+          !edit && 
+          <>
+            <FormLabel component="legend">Choose Level</FormLabel>
+            <RadioGroup row aria-label="position"
+              name="position" defaultValue="top"
+              onChange={(event) => getLevel(event.target.value)}>
+              <FormControlLabel
+                value={(level === '1') ? level : '1'}
+                control={<Radio color="default" />}
+                label="One"
+                labelPlacement="start"
+              />
+              <FormControlLabel
+                value={(level === '2') ? level : '2'}
+                control={<Radio color="default" />}
+                label="Two"
+                labelPlacement="start"
+              />
+            </RadioGroup>
+          </>
+        }
       <TextField id="question"
         label="Question"
         variant="outlined"

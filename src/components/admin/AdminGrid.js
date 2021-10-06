@@ -196,6 +196,7 @@ export default function AdminGrid({ base_url }) {
     const data = {
       type: level,
     };
+ 
     //validations start
     //question validation
     let validation = validate(data);

@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
 import { Grid, ListItem } from '@material-ui/core';
-import Table from './Table'
 import { FormControl, FormLabel, TextField } from "@material-ui/core";
 import { AddQuestionButton as GetResultButton } from "../Buttons";
 import {List, ListSubheader} from "@material-ui/core";
