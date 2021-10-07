@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from "react";
-import Box from "@mui/material/Box";
-import { Grid } from "@mui/material";
+import Box from "@material-ui/core/Box";
+import { Grid } from "@material-ui/core";
 import LevelOne from "./LevelOne";
 import LevelTwo from "./LevelTwo"
 import axios from "axios";
-import { FormControl, FormLabel, TextField } from "@mui/material";
+import { FormControl, FormLabel, TextField } from "@material-ui/core";
 import { AddQuestionButton as UploadEmail } from "../Buttons";
-import ClassIcon from "@mui/icons-material/Class";
+import ClassIcon from "@material-ui/icons/Class";
 
 export default function PlayerGrid({ base_url ,setCurrentTab,setResults}) {
   const box = {

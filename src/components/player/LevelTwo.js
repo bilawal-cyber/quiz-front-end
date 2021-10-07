@@ -1,6 +1,6 @@
-import {List, ListSubheader} from "@mui/material";
+import {List, ListSubheader} from "@material-ui/core";
 import {AddQuestionButton as SubmitAnswer} from "../Buttons";
-import SkipNextIcon from "@mui/icons-material/SkipNext";
+import SkipNextIcon from "@material-ui/icons/SkipNext";
 import {useEffect, useState} from "react";
 import axios from "axios";
 import TrueFalse from "../common/TrueFalse";

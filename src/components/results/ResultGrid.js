@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { makeStyles } from '@mui/styles';
-import Box from '@mui/material/Box';
-import { Grid, ListItem } from '@mui/material';
-import { FormControl, FormLabel, TextField } from "@mui/material";
+import { makeStyles } from '@material-ui/core/styles';
+import Box from '@material-ui/core/Box';
+import { Grid, ListItem } from '@material-ui/core';
+import { FormControl, FormLabel, TextField } from "@material-ui/core";
 import { AddQuestionButton as GetResultButton } from "../Buttons";
-import {List, ListSubheader} from "@mui/material";
-import ClassIcon from "@mui/icons-material/Class";
+import {List, ListSubheader} from "@material-ui/core";
+import ClassIcon from "@material-ui/icons/Class";
 import axios from 'axios';
 import Mcqs from '../common/Mcqs';
 import TrueFalse from '../common/TrueFalse';

@@ -1,7 +1,7 @@
-import {List, ListItem, ListItemText, ListSubheader} from '@mui/material'
+import {List, ListItem, ListItemText, ListSubheader} from '@material-ui/core'
 import React from 'react'
 import {AddQuestionButton as NextButton} from "../Buttons";
-import SkipNextIcon from '@mui/icons-material/SkipNext';
+import SkipNextIcon from '@material-ui/icons/SkipNext';
 import Mcqs from '../common/Mcqs'
 
 

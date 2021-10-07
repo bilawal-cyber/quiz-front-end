@@ -1,25 +1,25 @@
 import React, { useState } from 'react';
-import { makeStyles } from '@mui/styles';
-import Box from '@mui/material/Box';
-import Container from '@mui/material/Container';
-import Grid from '@mui/material/Grid';
+import { makeStyles } from '@material-ui/core/styles';
+import Box from '@material-ui/core/Box';
+import Container from '@material-ui/core/Container';
+import Grid from '@material-ui/core/Grid';
 import AdminGrid from './admin/AdminGrid';
-import { Tabs,Tab } from '@mui/material';
+import { Tabs,Tab } from '@material-ui/core';
 import PlayerGrid from './player/PlayerGrid';
 import ResultGrid from './results/ResultGrid';
 import AllQuestions from './admin/AllQuestions'
 
-// const useStyles = makeStyles((theme) => ({
-//   content: {
-//     flexGrow: 1,
-//     height: '100vh',
-//     overflow: 'auto',
-//   },
-//   container: {
-//     paddingTop: spacing(4),
-//     paddingBottom: spacing(4),
-//   },
-// }));
+const useStyles = makeStyles((theme) => ({
+  content: {
+    flexGrow: 1,
+    height: '100vh',
+    overflow: 'auto',
+  },
+  container: {
+    paddingTop: theme.spacing(4),
+    paddingBottom: theme.spacing(4),
+  },
+}));
 
 export default function Dashboard() {
   const [currentTab, setCurrentTab] = useState('one');
@@ -33,17 +33,11 @@ const box={
   background: "#d1d9ff",
   border:"1px solid rgb(19, 47, 76)"
 }
-  // const classes = useStyles();
+  const classes = useStyles();
   return (
-    <div 
-    // className={classes.root}
-    >
-      <main 
-      // className={classes.content}
-       style={{backgroundColor:"rgb(0, 30, 60)"}}>
-        <div
-        //  className={classes.appBarSpacer}
-         />
+    <div className={classes.root}>
+      <main className={classes.content} style={{backgroundColor:"rgb(0, 30, 60)"}}>
+        <div className={classes.appBarSpacer}/>
         <Container maxWidth="lg">
         <Grid  
                 container spacing={4}
