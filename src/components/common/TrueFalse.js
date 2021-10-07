@@ -1,10 +1,10 @@
 import React from 'react'
-import {RadioGroup} from "@material-ui/core";
-import Radio from "@material-ui/core/Radio";
-import FormGroup from "@material-ui/core/FormGroup";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import FormControl from "@material-ui/core/FormControl";
-import {List, ListItem, ListItemText, ListSubheader} from "@material-ui/core";
+import {RadioGroup} from "@mui/material";
+import Radio from "@mui/material/Radio";
+import FormGroup from "@mui/material/FormGroup";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import FormControl from "@mui/material/FormControl";
+import {List, ListItem, ListItemText, ListSubheader} from "@mui/material";
 const TrueFalse = ({ob,handleChange,identity}) => {
    const wrong={
        color:'red'
