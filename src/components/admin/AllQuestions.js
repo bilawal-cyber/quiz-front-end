@@ -14,24 +14,10 @@ import Delete from '@material-ui/icons/Delete';
 import Typography from '@material-ui/core/Typography';
 import Modal from '@material-ui/core/Modal';
 
-const style = {
-  position: 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  width: 400,
-  bgcolor: 'background.paper',
-  border: '2px solid #000',
-  boxShadow: 24,
-  p: 4,
-};
-
-
-
 const StyledTableCell = withStyles((theme) => ({
   head: {
-    backgroundColor: theme.palette.common.black,
-    color: theme.palette.common.white,
+    backgroundColor: '#d1d9ff',
+    color: 'black',
   },
   body: {
     fontSize: 14,
@@ -46,57 +32,63 @@ const StyledTableRow = withStyles((theme) => ({
   },
 }))(TableRow);
 
-// function createData(name, calories, fat, carbs, protein) {
-//   return { name, calories, fat, carbs, protein };
-// }
-
-// const rows = [
-//   createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
-//   createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
-//   createData('Eclair', 262, 16.0, 24, 6.0),
-//   createData('Cupcake', 305, 3.7, 67, 4.3),
-//   createData('Gingerbread', 356, 16.0, 49, 3.9),
-// ];
-
 const useStyles = makeStyles({
   table: {
     minWidth: 700,
+    background: "#d1d9ff",
   },
 });
+const box = {
+  background: "#d1d9ff",
+  border: "1px solid rgb(19, 47, 76)"
+}
+const ModelBox={
+  background: "#d1d9ff",
+  border: "1px solid rgb(19, 47, 76)",
+  position: 'relative',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 600,
+}
 
 export default function AllQuestions({ base_url }) {
   const classes = useStyles();
   const [questionList, setQuestionList] = useState([])
   const [currentQuestion, setCurrentQuestion] = useState([])
   const [errors, setErrors] = useState([]); //validation error storage
-  const [open, setOpen] = useState(false);
+  const [openViewModel, setOpenViewModel] = useState(false);
+  const [openEditModel,setOpenEditModel] = useState(false);
+  const [currentButton,setCurrentButton] = useState('')
   // const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+  const handleClose = () =>{setOpenViewModel(false); setOpenEditModel(false)};
   useEffect(() => {
     axios.get(base_url + '/getQuestions?admin=true')
       .then(res => setQuestionList(res.data))
       .catch(err => console.log(err))
   }, [])
+  useEffect(()=>{
+     if(currentButton==='View'){
+       setOpenViewModel(true)}
+     else if(currentButton==='edit'){
+       setOpenEditModel(true)}
+  },[currentQuestion])
   const getSingleQuestion = (id,req) => {
+    setCurrentButton(req)
     axios.get(base_url + `/getSingleQuestion?_id=${id}`)
       .then(res => setCurrentQuestion(res.data))
       .catch(err => console.log(err))
-     return  (req==='View')?setOpen(true):''
   }
   const getQuestion = (v) => {
     setCurrentQuestion((prevState) => [...prevState, { question: v }])
   }
-  const box = {
-    background: "#d1d9ff",
-    border: "1px solid rgb(19, 47, 76)"
-  }
+  
   var id = 0
 
   return (
     <>
     <Box
-      p={3}
-      sx={{ borderRadius: 16 }} style={box} mt={1}
+     style={box}
     >
       <TableContainer component={Paper}>
         <Table className={classes.table} aria-label="customized table">
@@ -133,39 +125,57 @@ export default function AllQuestions({ base_url }) {
         </Table>
       </TableContainer>
     </Box>
-    {
-      (currentQuestion.length)?
-      <Modal
-      open={open}
+    {(currentQuestion.length)?
+        <>
+          <Modal
+      open={openViewModel}
       onClose={handleClose}
       aria-labelledby="modal-modal-title"
       aria-describedby="modal-modal-description"
     >
-      <Box sx={style}>
+      <Box   p={3}
+      sx={{ borderRadius: 16 }} style={ModelBox} 
+      mt={1}>
         <Typography id="modal-modal-title" variant="h6" component="h2">
           {currentQuestion[0].question}
         </Typography>
          <List>
          {
             currentQuestion[0].answers.length?
-            currentQuestion[0].answers.map(a=>{
+            currentQuestion[0].answers.map(a=>(
               <ListItem key={a._id}>
                 <ListItemText>
                   {a.option}
                 </ListItemText>
               </ListItem>
-        }):
+  )):
             <ListItem>
-                              <ListItemText
-                         primary={currentQuestion[0].is_correct}
-                />
+                              <ListItemText>
+                         {currentQuestion[0].correct_answer.toString()}
+                </ListItemText>
 
             </ListItem>
          }
          </List>
       </Box>
-    </Modal>:""
-    }
+    </Modal>
+        <Modal
+        open={openEditModel}
+        onClose={handleClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box   p={3}
+        sx={{ borderRadius: 16 }} style={ModelBox} 
+        mt={1}>
+          <Typography id="modal-modal-title" variant="h6" component="h2">
+            {currentQuestion[0].question}
+          </Typography>
+        </Box>
+      </Modal>
+        </>
+     :"" 
+     }
     </>
   );
 }
