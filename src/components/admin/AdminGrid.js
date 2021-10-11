@@ -11,6 +11,7 @@ import LinearProgress from "@material-ui/core/LinearProgress";
 import Checkbox from "@material-ui/core/Checkbox";
 import FormGroup from "@material-ui/core/FormGroup";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
+import AddTrueFalse from "../common/AddTrueFalse";
 
 const drawerWidth = 240;
 
@@ -97,7 +98,7 @@ export default function AdminGrid({ base_url }) {
   const id = new Date().getTime();
   const [options, setOptions] = useState([
     {
-      index: id,
+      _id: id,
       is_correct: false,
       option: "",
     },
@@ -125,7 +126,7 @@ export default function AdminGrid({ base_url }) {
   const addInputField = () => {
     // const id= new Date().getTime()
     const newOption = {
-      index: id,
+      _id: id,
       is_correct: false,
       option: "",
     };
@@ -134,7 +135,7 @@ export default function AdminGrid({ base_url }) {
 
   //remove options
   const removeInputField = (id) => {
-    setOptions((prevState) => prevState.filter((f) => f.index !== id));
+    setOptions((prevState) => prevState.filter((f) => f._id !== id));
   };
   //combine answer and questions
   const validate = (data) => {
@@ -206,7 +207,7 @@ export default function AdminGrid({ base_url }) {
         .then((res) => {
           setOptions([
             {
-              index: id,
+              _id: id,
               is_correct: false,
               option: "",
             },
@@ -257,32 +258,7 @@ export default function AdminGrid({ base_url }) {
         />
         {level === "2" ? (
           <>
-            <FormGroup aria-label="position" row>
-              <FormControlLabel
-                value="opOne"
-                control={
-                  <Checkbox
-                    style={{ color: "#4b636e" }}
-                    onChange={(e) => handleTrueFalse(e)}
-                    checked={TrueFalse.opOne}
-                  />
-                }
-                label="True"
-                labelPlacement="start"
-              />
-              <FormControlLabel
-                value="opTwo"
-                control={
-                  <Checkbox
-                    style={{ color: "#4b636e" }}
-                    onChange={(e) => handleTrueFalse(e)}
-                  />
-                }
-                label="False"
-                labelPlacement="start"
-                checked={TrueFalse.opTwo}
-              />
-            </FormGroup>
+          <AddTrueFalse TrueFalse={TrueFalse} handleTrueFalse={handleTrueFalse}/>
             <AddQuestionButton onClick={uploadQuestion} text={"upload"} />
           </>
         ) : (
@@ -309,6 +285,7 @@ export default function AdminGrid({ base_url }) {
               setProgessBarShow={setProgessBarShow}
               onClick={removeInputField}
               setOptions={setOptions}
+              update={false}
             />
             {options.length > 0 ? (
               <AddQuestionButton onClick={uploadQuestion} text={"upload"} />

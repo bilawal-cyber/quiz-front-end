@@ -8,30 +8,53 @@ import { useEffect, useState } from "react";
 
 
 
-export default function AddOptions({ options, onClick, setOptions, setProgessBarShow }) {
+export default function AddOptions({ options, onClick, setOptions, setProgessBarShow,update }) {
 
 
   const setOption = (v, id) => {
-    setOptions(
-      options.map((op) => {
-        return op.index === id ? { ...op, option: v } : op
-      })
-    )
+    if(!update){
+      setOptions(
+        options.map((op) => {
+          return op._id === id ? { ...op, option: v } : op
+        })
+      )
+    }else{
+      setOptions(prev=>{
+        let option=prev.answers.map((op) => {
+          return op._id === id ? { ...op, option: v } : op
+        })
+        return {...prev,answers:option}
+      }
+
+      )
+    }
   }
 
   const setIsTrue = (check, id) => {
-    setOptions(
-      options.map((op) => {
-        return op.index === id ? { ...op, is_correct: check } : { ...op, is_correct: false }
-      })
-    )
+    if(!update){
+      setOptions(
+        options.map((op) => {
+          return op._id === id ? { ...op, is_correct: check } : { ...op, is_correct: false }
+        })
+      )
+    }else{
+      setOptions(prev=>{
+        let option=prev.answers.map((op) => {
+          return op._id === id ? { ...op, is_correct: check } : { ...op, is_correct: false }
+        })
+        return {...prev,answers:option}
+      }
+      )
+    }
   }
 
   useEffect(() => {
+   if(!update){
     setProgessBarShow(true)
     setInterval(() => {
       setProgessBarShow(false);
     }, 1000);
+   }
   }, [setProgessBarShow])
 
 
@@ -41,21 +64,21 @@ export default function AddOptions({ options, onClick, setOptions, setProgessBar
       {
         (options.length > 0) ?
           options.map((op) => (
-            <List key={op.index}>
+            <List key={op._id}>
               <ListItem alignItems="center">
                 <Checkbox
                   style={{ color: "#4b636e" }}
                   checked={op.is_correct}
-                  onChange={(e) => setIsTrue(e.target.checked, op.index)}
+                  onChange={(e) => setIsTrue(e.target.checked, op._id)}
                   inputProps={{ 'aria-label': 'secondary checkbox' }}
                 />
                 <TextField
                   fullWidth
                   label="Option"
                   value={op.option}
-                  onChange={(e) => setOption(e.target.value, op.index)}
+                  onChange={(e) => setOption(e.target.value, op._id)}
                 />
-                <Removeicon onClick={onClick.bind(this, op.index)} />
+                <Removeicon onClick={onClick.bind(this, op._id)} />
               </ListItem>
             </List>
           )) : ''
