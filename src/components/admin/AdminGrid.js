@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Box from "@material-ui/core/Box";
 import List from "@material-ui/core/List";
-import AddQuestion from "./AddQuestion";
-import AddOptions from "./addOptions";
+import AddQuestion from "../common/AddQuestion";
+import AddOptions from "../common/addOptions";
 import { Addicon, AddQuestionButton } from "../Buttons";
 import axios from "axios";
 import { Grid } from "@material-ui/core";
@@ -253,6 +253,7 @@ export default function AdminGrid({ base_url }) {
           validationErrors={errors}
           setErrors={setErrors}
           question={Question}
+          update={false}
         />
         {level === "2" ? (
           <>

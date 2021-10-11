@@ -13,6 +13,7 @@ import axios from 'axios';
 import Delete from '@material-ui/icons/Delete';
 import Typography from '@material-ui/core/Typography';
 import Modal from '@material-ui/core/Modal';
+import AddQuestion from '../common/AddQuestion';
 
 const StyledTableCell = withStyles((theme) => ({
   head: {
@@ -61,7 +62,8 @@ export default function AllQuestions({ base_url }) {
   const [openEditModel,setOpenEditModel] = useState(false);
   const [currentButton,setCurrentButton] = useState('')
   // const handleOpen = () => setOpen(true);
-  const handleClose = () =>{setOpenViewModel(false); setOpenEditModel(false)};
+  const handleClose = () =>{
+    setOpenViewModel(false); setOpenEditModel(false)};
   useEffect(() => {
     axios.get(base_url + '/getQuestions?admin=true')
       .then(res => setQuestionList(res.data))
@@ -80,7 +82,7 @@ export default function AllQuestions({ base_url }) {
       .catch(err => console.log(err))
   }
   const getQuestion = (v) => {
-    setCurrentQuestion((prevState) => [...prevState, { question: v }])
+    setCurrentQuestion({...currentQuestion[0],question:v})
   }
   
   var id = 0
@@ -159,7 +161,7 @@ export default function AllQuestions({ base_url }) {
          </List>
       </Box>
     </Modal>
-        <Modal
+        {/* <Modal
         open={openEditModel}
         onClose={handleClose}
         aria-labelledby="modal-modal-title"
@@ -168,14 +170,36 @@ export default function AllQuestions({ base_url }) {
         <Box   p={3}
         sx={{ borderRadius: 16 }} style={ModelBox} 
         mt={1}>
-          <Typography id="modal-modal-title" variant="h6" component="h2">
-            {currentQuestion[0].question}
-          </Typography>
+        <AddQuestion
+        getLevel={()=>{console.log('2')}}
+        getQuestion={getQuestion}
+        level={currentQuestion[0].type}
+        validationErrors={errors}
+        setErrors={setErrors}
+        question={currentQuestion[0].question}
+        update={true}
+        />
         </Box>
-      </Modal>
+      </Modal> */}
         </>
      :"" 
      }
+{
+  (currentButton==='edit' && currentQuestion[0])?
+  <Box  p={3}
+  sx={{ borderRadius: 16 }} style={box} 
+  mt={1}>
+  <AddQuestion
+     getLevel={()=>{console.log('2')}}
+     getQuestion={getQuestion}
+     level={currentQuestion[0].type}
+     validationErrors={errors}
+     setErrors={setErrors}
+     question={currentQuestion[0].question}
+     update={true}
+     />
+  </Box>:''
+}
     </>
   );
 }

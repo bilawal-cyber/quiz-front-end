@@ -7,7 +7,7 @@ import FormLabel from '@material-ui/core/FormLabel';
 import TextField from '@material-ui/core/TextField';
 import { ListItem, List } from '@material-ui/core';
 
-export default function AddQuestion({ getLevel, getQuestion, level, validationErrors, setErrors, question, edit }) {
+export default function AddQuestion({ getLevel, getQuestion, level, validationErrors, setErrors, question,update }) {
 
   let key = 0;
   const removeError = () => {
@@ -24,10 +24,10 @@ export default function AddQuestion({ getLevel, getQuestion, level, validationEr
   return (
     <FormControl component="fieldset" fullWidth sx={{ m: 5 }}>
         {
-          !edit && 
+            !update ?
           <>
-            <FormLabel component="legend">Choose Level</FormLabel>
-            <RadioGroup row aria-label="position"
+            <FormLabel component="legend">Choose Level</FormLabel> 
+              <RadioGroup row aria-label="position"
               name="position" defaultValue="top"
               onChange={(event) => getLevel(event.target.value)}>
               <FormControlLabel
@@ -42,8 +42,9 @@ export default function AddQuestion({ getLevel, getQuestion, level, validationEr
                 label="Two"
                 labelPlacement="start"
               />
-            </RadioGroup>
+            </RadioGroup> 
           </>
+          :''
         }
       <TextField id="question"
         label="Question"
