@@ -17,6 +17,9 @@ import AddQuestion from '../common/AddQuestion';
 import AddOptions from '../common/addOptions';
 import { Addicon, AddQuestionButton } from "../Buttons";
 import AddTrueFalse from '../common/AddTrueFalse';
+import { confirmAlert } from 'react-confirm-alert'; // Import
+import 'react-confirm-alert/src/react-confirm-alert.css'; // Import css
+
 
 const StyledTableCell = withStyles((theme) => ({
   head: {
@@ -55,7 +58,8 @@ const ModelBox = {
   transform: 'translate(-50%, -50%)',
   width: 600,
 }
-var orignalCurrentQuestion='abc';
+var orignalCurrentQuestion='';
+var questionListCopy=''
 export default function AllQuestions({ base_url }) {
   const classes = useStyles();
   const [questionList, setQuestionList] = useState([])
@@ -71,7 +75,7 @@ export default function AllQuestions({ base_url }) {
   };
   useEffect(() => {
     axios.get(base_url + '/getQuestions?admin=true')
-      .then(res => setQuestionList(res.data))
+      .then(res =>{setQuestionList(res.data);questionListCopy=res.data})
       .catch(err => console.log(err))
   }, [])
   useEffect(() => {
@@ -81,6 +85,9 @@ export default function AllQuestions({ base_url }) {
     else if (currentButton === 'edit') {
       setOpenEditModel(true)
     }
+    if(currentQuestion.ready){
+      updateFromServer()
+    }
   }, [currentQuestion])
   
   const getSingleQuestion = (id, req) => {
@@ -88,9 +95,17 @@ export default function AllQuestions({ base_url }) {
     axios.get(base_url + `/getSingleQuestion?_id=${id}`)
       .then(res =>{ setCurrentQuestion(res.data[0])
       orignalCurrentQuestion=res.data[0]
+      if(orignalCurrentQuestion.type==='2'){
+        (orignalCurrentQuestion.correct_answer)?setTrueFalse({ opOne: true, opTwo: false }):setTrueFalse({ opOne: false, opTwo: true })
+      }
       // console.log('1',orignalCurrentQuestion)
     })
       .catch(err => console.log(err))
+  }
+  const delSingleQuestion = (id) =>{
+      axios.get(base_url+`/del/question?_id=${id}`)
+          .then(res=>console.log(res))
+            .catch(err=>console.log(err))
   }
   const getQuestion = (v) => {
     setCurrentQuestion({ ...currentQuestion, question: v })
@@ -109,36 +124,112 @@ export default function AllQuestions({ base_url }) {
     });
   };
   const removeInputField = (id) => {
+    let currentOption =  currentQuestion.answers.filter((a) => a._id === id)[0]
+    if(!currentOption.is_new){
+        axios.get(base_url+`/del/options?_id=${id}`)
+                .then(res=>console.log(res))
+                    .catch(err=>console.log(err))
+    }
     setCurrentQuestion((prevState) => {
       let options = prevState.answers.filter((a) => a._id !== id)
       return { ...prevState, answers: options }
     });
   };
   const handleTrueFalse = (v) => {
-    v.target.value === "opOne"
-      ? setTrueFalse({ opOne: true, opTwo: false })
-      : setTrueFalse({
-        opOne: false,
-        opTwo: true,
+    if(v.target.value === "opOne")
+      {
+        setTrueFalse({ opOne: true, opTwo: false });
+        setCurrentQuestion(prev=>(
+          {...prev,correct_answer:true}
+        ))
+      } else{
+        setTrueFalse({
+          opOne: false,
+          opTwo: true,
+        });
+        setCurrentQuestion(prev=>(
+          {...prev,correct_answer:false}
+        ))
+      }
+  };
+  const validate = () => {
+    if (errors) {
+      setErrors((prev) => {
+        prev.splice(0, 1);
       });
+    }
+    if (!currentQuestion.question) {
+      setErrors([
+        { name: "frontEndEmptyQuestion", message: "please fill out question" },
+      ]);
+      return false;
+    }
+    if (currentQuestion.type === "2") {
+      if (!TrueFalse.opOne && !TrueFalse.opTwo) {
+        setErrors([
+          { name: "frontEndTrueFalse", message: "please choose right option" },
+        ]);
+        return false;
+      }
+    }
+
+    //MCQS validation
+    if (currentQuestion.type === "1") {
+      // data.answers = [...options];
+      if (currentQuestion.answers.length <= 1) {
+        setErrors([
+          {
+            name: "frontEndOptionsLenght",
+            message: "atleast two option are required",
+          },
+        ]);
+        return false;
+      }
+
+      if (currentQuestion.answers.filter((a) => !a.option).length) {
+        setErrors([
+          { name: "frontEndOptions", message: "please fill all options" },
+        ]);
+        return false;
+      }
+
+      if (currentQuestion.answers.filter((a) => a.is_correct).length === 0) {
+        setErrors([
+          { name: "frontEndCheck", message: "please check the correct one" },
+        ]);
+        return false;
+      }
+    }
+    return true;
   };
   const updateQuestion = (type) =>{
-    if(orignalCurrentQuestion.question!==currentQuestion.question){
+    if(validate()){
+      if(orignalCurrentQuestion.question!==currentQuestion.question){
         setCurrentQuestion(prev=>({...prev,is_change:true}))
     }
     orignalCurrentQuestion.answers.forEach(answer => {
         let current  = currentQuestion.answers.filter(a=>a._id===answer._id)[0]
-        // let newOp  = currentQuestion.answers.filter(a=>a._id!==answer._id)[0]
         if(current){
-          let changedId= answer.option!==current.option? current._id : ''
+          let changedId= answer.option!==current.option || answer.is_correct!==current.is_correct? current._id : ''
             setCurrentQuestion(prev=>{
                   let option=prev.answers.map((op) => {
                     return op._id===changedId ? { ...op, is_change: true } : op
                   })
-                  return {...prev,answers:option}
+                  return {...prev,answers:option,ready:true}
             })
         }
-    });
+    });  
+    }
+  }
+  const updateFromServer=()=>{
+    axios.post(base_url+'/updateQuestion',currentQuestion)
+    .then(res=>{
+      questionListCopy[questionListCopy.findIndex(e=>e._id===currentQuestion._id)]=currentQuestion
+      setQuestionList(questionList)
+      setCurrentQuestion({})
+      setOpenEditModel(false)
+    })
+        .catch(err=>console.log(err))
   }
 
   var tableId = 0
@@ -170,7 +261,7 @@ export default function AllQuestions({ base_url }) {
                     <IconButton edge="end" aria-label="Edit" onClick={() => { getSingleQuestion(row._id, 'edit') }} >
                       <Edit />
                     </IconButton>
-                    <IconButton edge="end" aria-label="Delete" onClick={() => { getSingleQuestion(row._id, 'delete') }} >
+                    <IconButton edge="end" aria-label="Delete" onClick={() => { delSingleQuestion(row._id) }} >
                       <Delete />
                     </IconButton>
                     <IconButton edge="end" aria-label="View" onClick={() => { getSingleQuestion(row._id, 'View') }} >
@@ -266,7 +357,7 @@ export default function AllQuestions({ base_url }) {
               {currentQuestion.type === "2" ? (
                 <>
                   <AddTrueFalse TrueFalse={TrueFalse} handleTrueFalse={handleTrueFalse} />
-                  <AddQuestionButton onClick={() => console.log('here')} text={"update"} />
+                  <AddQuestionButton onClick={() => updateFromServer()} text={"update"} />
                 </>
               ) : (
                 ""
