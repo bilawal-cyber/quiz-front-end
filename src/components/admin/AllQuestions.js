@@ -19,6 +19,7 @@ import { Addicon, AddQuestionButton } from "../Buttons";
 import AddTrueFalse from '../common/AddTrueFalse';
 import { confirmAlert } from 'react-confirm-alert'; // Import
 import 'react-confirm-alert/src/react-confirm-alert.css'; // Import css
+import '../../index.css'
 
 
 const StyledTableCell = withStyles((theme) => ({
@@ -103,9 +104,25 @@ export default function AllQuestions({ base_url }) {
       .catch(err => console.log(err))
   }
   const delSingleQuestion = (id) =>{
-      axios.get(base_url+`/del/question?_id=${id}`)
-          .then(res=>console.log(res))
-            .catch(err=>console.log(err))
+    confirmAlert({
+      title: 'Confirm to Delete',
+      message: 'Are you sure you want to delete.',
+      buttons: [
+        {
+          label: 'Yes',
+          onClick: () => {
+            axios.get(base_url+`/del/question?_id=${id}`)
+            .then(res=>console.log(res))
+              .catch(err=>console.log(err))
+          }
+        },
+        {
+          label: 'No',
+          onClick: () => {}
+        }
+      ]
+    });
+     
   }
   const getQuestion = (v) => {
     setCurrentQuestion({ ...currentQuestion, question: v })
@@ -124,16 +141,35 @@ export default function AllQuestions({ base_url }) {
     });
   };
   const removeInputField = (id) => {
-    let currentOption =  currentQuestion.answers.filter((a) => a._id === id)[0]
-    if(!currentOption.is_new){
-        axios.get(base_url+`/del/options?_id=${id}`)
-                .then(res=>console.log(res))
-                    .catch(err=>console.log(err))
-    }
-    setCurrentQuestion((prevState) => {
-      let options = prevState.answers.filter((a) => a._id !== id)
-      return { ...prevState, answers: options }
+    confirmAlert({
+      title: 'Confirm to Delete',
+      message: 'Are you sure you want to delete.',
+      buttons: [
+        {
+          label: 'Yes',
+          onClick: () => {
+          let currentOption =  currentQuestion.answers.filter((a) => a._id === id)[0]
+          if(!currentOption.is_new){
+          axios.get(base_url+`/del/options?_id=${id}`)
+          .then(res=>{
+            setCurrentQuestion((prevState) => {
+              let options = prevState.answers.filter((a) => a._id !== id)
+              return { ...prevState, answers: options }
+              });
+          })
+              .catch(err=>console.log(err))
+          }
+          }
+        },
+        {
+          label: 'No',
+          onClick: () => {}
+        }
+      ],
+      overlayClassName:'sweet-alert-index'
     });
+
+    
   };
   const handleTrueFalse = (v) => {
     if(v.target.value === "opOne")

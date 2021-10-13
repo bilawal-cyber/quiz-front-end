@@ -41,20 +41,20 @@ export default function ResultGrid({ result, setResults, base_url }) {
     }
     axios.get(base_url + `/userData?id=${id}`)
     .then(res =>{
-      let backendDataOne = res.data[0].userAnwers.filter(u=>u.userAns)
-      let backendDatatwo =  res.data[0].userAnwers.filter(u=>!u.userAns)
+      let Mcqs = res.data[0].userAnwers.filter(u=>u.userAns)
+      let TrueFalse =  res.data[0].userAnwers.filter(u=>!u.userAns)
       let score = res.data[0].score
  
-        axios.get(base_url+'/getQuestions').then(res=>{
+        axios.get(base_url+'/getQuestionsForResult').then(res=>{
           let levelOne=res.data.levelOne.map((q) => {
             let answers = q.answers.map((a) => {
-              let selected = backendDataOne.filter(u=>u.userAns._id===a._id)
+              let selected = Mcqs.filter(u=>u.userAns._id===a._id)
               return { ...a, userAns:selected.length>0};  //adding user Answer
             });
             return { ...q, answers };
           });
           let levelTwo = res.data.levelTwo.map((q) => {
-            let selected = backendDatatwo.filter(e=>e.question_id._id===q._id)[0]
+            let selected = TrueFalse.filter(e=>e.question_id._id===q._id)[0]
             return { ...q, userAns: selected.is_correct?q.correct_answer:!q.correct_answer }
           });
           setResults({levelOne:levelOne,levelTwo:levelTwo,score:score})
@@ -160,31 +160,6 @@ export default function ResultGrid({ result, setResults, base_url }) {
                 onClick={getAllQuizes}
               />
             </FormControl>
-            {/* {
-              AllRecords.map(r=>(
-                <List key={r._id}
-                subheader={
-                    <ListSubheader component="div" id="nested-list-subheader">
-                        {r.createdAt}
-                        {r.score}
-                    </ListSubheader>
-                    
-                }
-            >
-              <ListItem>
-                    Score {r.score}
-              </ListItem>
-              <ListItem>
-              <GetResultButton
-                text={"see result"}
-                icon={<ClassIcon />}
-                onClick={()=>getResult(r._id)}
-              />
-              </ListItem>
-
-                  </List>
-              ))
-            } */}
           </Box>
       }
        
