@@ -20,6 +20,7 @@ import AddTrueFalse from '../common/AddTrueFalse';
 import { confirmAlert } from 'react-confirm-alert'; // Import
 import 'react-confirm-alert/src/react-confirm-alert.css'; // Import css
 import '../../index.css'
+import Pie from './PieChart';
 
 
 const StyledTableCell = withStyles((theme) => ({
@@ -48,7 +49,7 @@ const useStyles = makeStyles({
 });
 const box = {
   background: "#d1d9ff",
-  border: "1px solid rgb(19, 47, 76)"
+  border: "1px solid rgb(19, 47, 76)",
 }
 const ModelBox = {
   background: "#d1d9ff",
@@ -275,6 +276,7 @@ export default function AllQuestions({ base_url }) {
       <Box
         style={box}
       >
+        <Pie/>
         <TableContainer component={Paper}>
           <Table className={classes.table} aria-label="customized table">
             <TableHead>
@@ -324,8 +326,8 @@ export default function AllQuestions({ base_url }) {
               <Typography id="modal-modal-title" variant="h6" component="h2">
                 {currentQuestion.question}
               </Typography>
-              <List>
-                {
+               <>
+               {
                   currentQuestion ?
                     currentQuestion.answers.map(a => (
                       <ListItem key={a._id}>
@@ -333,15 +335,10 @@ export default function AllQuestions({ base_url }) {
                           {a.option}
                         </ListItemText>
                       </ListItem>
-                    )) :
-                    <ListItem>
-                      <ListItemText>
-                        {currentQuestion.correct_answer.toString()}
-                      </ListItemText>
-
-                    </ListItem>
+                    )) :''
+                    // <Pie />
                 }
-              </List>
+               </>
             </Box>
           </Modal>
           <Modal
@@ -398,7 +395,6 @@ export default function AllQuestions({ base_url }) {
               ) : (
                 ""
               )}
-
             </Box>
           </Modal>
         </>
