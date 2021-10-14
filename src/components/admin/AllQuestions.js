@@ -20,7 +20,8 @@ import AddTrueFalse from '../common/AddTrueFalse';
 import { confirmAlert } from 'react-confirm-alert'; // Import
 import 'react-confirm-alert/src/react-confirm-alert.css'; // Import css
 import '../../index.css'
-import Pie from './PieChart';
+import BarChat from './BarChat';
+import PieChart from './PieChart'
 
 
 const StyledTableCell = withStyles((theme) => ({
@@ -71,6 +72,7 @@ export default function AllQuestions({ base_url }) {
   const [openEditModel, setOpenEditModel] = useState(false);
   const [currentButton, setCurrentButton] = useState('')
   const [TrueFalse, setTrueFalse] = useState({ opOne: false, opTwo: false });
+  const [barChartData,setBarChatData] = useState([])
   // const handleOpen = () => setOpen(true);
   const handleClose = () => {
     setOpenViewModel(false); setOpenEditModel(false)
@@ -81,28 +83,58 @@ export default function AllQuestions({ base_url }) {
       .catch(err => console.log(err))
   }, [])
   useEffect(() => {
-    if (currentButton === 'View') {
-      setOpenViewModel(true)
-    }
-    else if (currentButton === 'edit') {
+    if (currentButton === 'edit') {
       setOpenEditModel(true)
     }
     if(currentQuestion.ready){
       updateFromServer()
     }
   }, [currentQuestion])
+  useEffect(()=>{
+    if (barChartData.length>0) {
+      setOpenViewModel(true)
+    }
+  },[barChartData])
   
   const getSingleQuestion = (id, req) => {
     setCurrentButton(req)
-    axios.get(base_url + `/getSingleQuestion?_id=${id}`)
+    if(req==='View'){
+      axios.get(base_url + `/getSingleQuestion?_id=${id}`)
       .then(res =>{ setCurrentQuestion(res.data[0])
+      // orignalCurrentQuestion=res.data[0]
+      if(orignalCurrentQuestion.type==='2'){
+        (orignalCurrentQuestion.correct_answer)?setTrueFalse({ opOne: true, opTwo: false }):setTrueFalse({ opOne: false, opTwo: true })
+      }
+      let cur=res.data[0]
+      axios.get(base_url+`/view/question?_id=${id}`)
+      .then(res=>AnalysisData(res.data,cur))
+      .catch(err=>console.log(err))
+    })
+    }else{
+      axios.get(base_url + `/getSingleQuestion?_id=${id}`)
+      .then(res =>{ 
+        setCurrentQuestion(res.data[0])
       orignalCurrentQuestion=res.data[0]
       if(orignalCurrentQuestion.type==='2'){
         (orignalCurrentQuestion.correct_answer)?setTrueFalse({ opOne: true, opTwo: false }):setTrueFalse({ opOne: false, opTwo: true })
       }
-      // console.log('1',orignalCurrentQuestion)
     })
       .catch(err => console.log(err))
+    }
+  }
+  const AnalysisData = (data,currentQuestion) =>{
+    let visual = []  
+    // console.log('1',data)
+    if(currentQuestion.answers.length>0){
+      currentQuestion.answers.forEach(ans=>{
+      visual.push({option:ans.option,count:data.filter(a=>a.userAns===ans._id).length})
+      })
+      setBarChatData(visual)
+      return
+    }else{
+      setBarChatData([{a:'1',b:'2'}])
+    }
+
   }
   const delSingleQuestion = (id) =>{
     confirmAlert({
@@ -159,6 +191,11 @@ export default function AllQuestions({ base_url }) {
               });
           })
               .catch(err=>console.log(err))
+          }else{
+            setCurrentQuestion((prevState) => {
+              let options = prevState.answers.filter((a) => a._id !== id)
+              return { ...prevState, answers: options }
+              });
           }
           }
         },
@@ -276,7 +313,6 @@ export default function AllQuestions({ base_url }) {
       <Box
         style={box}
       >
-        <Pie/>
         <TableContainer component={Paper}>
           <Table className={classes.table} aria-label="customized table">
             <TableHead>
@@ -328,15 +364,10 @@ export default function AllQuestions({ base_url }) {
               </Typography>
                <>
                {
-                  currentQuestion ?
-                    currentQuestion.answers.map(a => (
-                      <ListItem key={a._id}>
-                        <ListItemText>
-                          {a.option}
-                        </ListItemText>
-                      </ListItem>
-                    )) :''
-                    // <Pie />
+                  currentQuestion.answers.length>0 ?
+                    <BarChat barChartData={barChartData}/> 
+                    :
+                    <PieChart/>
                 }
                </>
             </Box>
