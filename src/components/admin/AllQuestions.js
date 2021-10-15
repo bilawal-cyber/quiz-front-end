@@ -65,32 +65,32 @@ var orignalCurrentQuestion='';
 var questionListCopy=''
 export default function AllQuestions({ base_url }) {
   const classes = useStyles();
-  const [questionList, setQuestionList] = useState([])
-  const [currentQuestion, setCurrentQuestion] = useState({})
+  const [questionList, setQuestionList] = useState([])//all questions
+  const [currentQuestion, setCurrentQuestion] = useState({}) //single question opened
   const [errors, setErrors] = useState([]); //validation error storage
-  const [openViewModel, setOpenViewModel] = useState(false);
-  const [openEditModel, setOpenEditModel] = useState(false);
-  const [currentButton, setCurrentButton] = useState('')
-  const [TrueFalse, setTrueFalse] = useState({ opOne: false, opTwo: false });
-  const [barChartData,setBarChatData] = useState([])
+  const [openViewModel, setOpenViewModel] = useState(false); //charts
+  const [openEditModel, setOpenEditModel] = useState(false); //update question
+  const [currentButton, setCurrentButton] = useState('') //clicked action button
+  const [TrueFalse, setTrueFalse] = useState({ opOne: false, opTwo: false }); //true false checkbox bindings in edit model
+  const [barChartData,setBarChatData] = useState([]) //view model chart
   // const handleOpen = () => setOpen(true);
   const handleClose = () => {
     setOpenViewModel(false); setOpenEditModel(false)
   };
-  useEffect(() => {
+  useEffect(() => { //all questions
     axios.get(base_url + '/getQuestions?admin=true')
       .then(res =>{setQuestionList(res.data);questionListCopy=res.data})
       .catch(err => console.log(err))
   }, [])
-  useEffect(() => {
-    if (currentButton === 'edit') {
+  useEffect(() => { 
+    if (currentButton === 'edit') { //asyn data loaded model
       setOpenEditModel(true)
     }
-    if(currentQuestion.ready){
+    if(currentQuestion.ready){ //update question on state ready
       updateFromServer()
     }
   }, [currentQuestion])
-  useEffect(()=>{
+  useEffect(()=>{ //asyn data loaded model
     if (barChartData.length>0) {
       setOpenViewModel(true)
     }
@@ -98,33 +98,29 @@ export default function AllQuestions({ base_url }) {
   
   const getSingleQuestion = (id, req) => {
     setCurrentButton(req)
-    if(req==='View'){
       axios.get(base_url + `/getSingleQuestion?_id=${id}`)
-      .then(res =>{ setCurrentQuestion(res.data[0])
-      // orignalCurrentQuestion=res.data[0]
-      if(orignalCurrentQuestion.type==='2'){
+      .then(res =>{
+        let question=res.data[0] 
+        setCurrentQuestion(question)
+        if(req==='View'){
+        getAllAnswers(id,question)
+        }
+        else{ //make copy of question for update track
+        orignalCurrentQuestion=question
+        if(orignalCurrentQuestion.type==='2'){
         (orignalCurrentQuestion.correct_answer)?setTrueFalse({ opOne: true, opTwo: false }):setTrueFalse({ opOne: false, opTwo: true })
-      }
-      let cur=res.data[0]
-      axios.get(base_url+`/view/question?_id=${id}`)
-      .then(res=>AnalysisData(res.data,cur))
-      .catch(err=>console.log(err))
+        }
+        }
     })
-    }else{
-      axios.get(base_url + `/getSingleQuestion?_id=${id}`)
-      .then(res =>{ 
-        setCurrentQuestion(res.data[0])
-      orignalCurrentQuestion=res.data[0]
-      if(orignalCurrentQuestion.type==='2'){
-        (orignalCurrentQuestion.correct_answer)?setTrueFalse({ opOne: true, opTwo: false }):setTrueFalse({ opOne: false, opTwo: true })
-      }
-    })
-      .catch(err => console.log(err))
-    }
+       .catch(err => console.log(err))
   }
-  const AnalysisData = (data,currentQuestion) =>{
+  const getAllAnswers=(question_id,question)=>{
+    axios.get(base_url+`/view/question?_id=${question_id}`)
+    .then(res=>AnalysisData(res.data,question))
+    .catch(err=>console.log(err))
+  }
+  const AnalysisData = (data,currentQuestion) =>{ //chart visualization calculations
     let visual = []  
-    // console.log('1',data)
     if(currentQuestion.answers.length>0){
       currentQuestion.answers.forEach(ans=>{
       visual.push({option:ans.option,count:data.filter(a=>a.userAns===ans._id).length})
@@ -132,7 +128,7 @@ export default function AllQuestions({ base_url }) {
       setBarChatData(visual)
       return
     }else{
-      setBarChatData([{a:'1',b:'2'}])
+      setBarChatData([{'true':'30','false':'60'}])
     }
 
   }
