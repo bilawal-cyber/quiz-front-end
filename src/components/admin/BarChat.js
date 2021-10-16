@@ -4,7 +4,7 @@ import Chart from "react-apexcharts";
 class BarChart extends Component {
   constructor(props) {
     super(props);
-console.log(this.props.barChartData)
+// console.log(this.props.barChartData)
     this.state = {
       options: {
         chart: {

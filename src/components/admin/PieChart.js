@@ -8,7 +8,7 @@ class Donut extends Component {
 
     this.state = {
       options: {"true":"false"},
-      series: [60,50],
+      series: [this.props.piechartData.true,this.props.piechartData.false],
       labels: ['true','false']
     }
   }

@@ -72,7 +72,7 @@ export default function AllQuestions({ base_url }) {
   const [openEditModel, setOpenEditModel] = useState(false); //update question
   const [currentButton, setCurrentButton] = useState('') //clicked action button
   const [TrueFalse, setTrueFalse] = useState({ opOne: false, opTwo: false }); //true false checkbox bindings in edit model
-  const [barChartData,setBarChatData] = useState([]) //view model chart
+  const [chartData,setchartData] = useState([]) //view model chart
   // const handleOpen = () => setOpen(true);
   const handleClose = () => {
     setOpenViewModel(false); setOpenEditModel(false)
@@ -91,10 +91,10 @@ export default function AllQuestions({ base_url }) {
     }
   }, [currentQuestion])
   useEffect(()=>{ //asyn data loaded model
-    if (barChartData.length>0) {
+    if (chartData.length>0) {
       setOpenViewModel(true)
     }
-  },[barChartData])
+  },[chartData])
   
   const getSingleQuestion = (id, req) => {
     setCurrentButton(req)
@@ -125,12 +125,14 @@ export default function AllQuestions({ base_url }) {
       currentQuestion.answers.forEach(ans=>{
       visual.push({option:ans.option,count:data.filter(a=>a.userAns===ans._id).length})
       })
-      setBarChatData(visual)
-      return
+      setchartData(visual)
     }else{
-      setBarChatData([{'true':'30','false':'60'}])
+      let visual ={true:0,false:0}
+      data.forEach(a=>{
+        a.is_correct?visual[currentQuestion.correct_answer]+=1:visual[!currentQuestion.correct_answer]=+1
+      })
+      setchartData([visual])
     }
-
   }
   const delSingleQuestion = (id) =>{
     confirmAlert({
@@ -361,9 +363,9 @@ export default function AllQuestions({ base_url }) {
                <>
                {
                   currentQuestion.answers.length>0 ?
-                    <BarChat barChartData={barChartData}/> 
+                    <BarChat barChartData={chartData}/> 
                     :
-                    <PieChart/>
+                    <PieChart piechartData={chartData[0]}/>
                 }
                </>
             </Box>
