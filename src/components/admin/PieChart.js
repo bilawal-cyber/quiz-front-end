@@ -7,9 +7,14 @@ class Donut extends Component {
     super(props);
 
     this.state = {
-      options: {"true":"false"},
+    //   options: {"true":"false"},
       series: [this.props.piechartData.true,this.props.piechartData.false],
-      labels: ['true','false']
+      options: {
+        labels: ['True', 'False'],
+      },
+      fill: {
+        colors: ['#1A73E8', '#B32824']
+      }
     }
   }
 
