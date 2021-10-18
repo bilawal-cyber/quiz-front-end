@@ -90,7 +90,7 @@ export const AllResults = ({base_url}) => {
             <TableHead>
               <TableRow>
                 <StyledTableCell>id</StyledTableCell>
-                <StyledTableCell>Question</StyledTableCell>
+                <StyledTableCell>Emails</StyledTableCell>
                 <StyledTableCell>View Results</StyledTableCell>
               </TableRow>
             </TableHead>
