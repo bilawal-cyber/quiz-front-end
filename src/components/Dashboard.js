@@ -24,7 +24,7 @@ const useStyles = makeStyles((theme) => ({
 export default function Dashboard() {
   const [currentTab, setCurrentTab] = useState('one');
   const [result,setResults] =  useState([])
-  const base_url='http://127.0.0.1:5000/api';
+  const base_url='https://quiz-back-end-1.herokuapp.com/api';
 
 const handleChange = (event, newValue) => {
   setCurrentTab(newValue);
