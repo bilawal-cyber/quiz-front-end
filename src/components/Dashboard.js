@@ -7,7 +7,8 @@ import AdminGrid from './admin/AdminGrid';
 import { Tabs,Tab } from '@material-ui/core';
 import PlayerGrid from './player/PlayerGrid';
 import ResultGrid from './results/ResultGrid';
-import AllQuestions from './admin/AllQuestions'
+import AllQuestions from './admin/AllQuestions';
+import { AllResults } from './admin/AllResults';
 
 const useStyles = makeStyles((theme) => ({
   content: {
@@ -24,7 +25,10 @@ const useStyles = makeStyles((theme) => ({
 export default function Dashboard() {
   const [currentTab, setCurrentTab] = useState('one');
   const [result,setResults] =  useState([])
-  const base_url='https://quiz-back-end-1.herokuapp.com/api';
+  let base_url='https://quiz-back-end-1.herokuapp.com/api';
+  if(process.env.NODE_ENV==='development'){
+    base_url='http://127.0.0.1:5000/api';
+  }
 
 const handleChange = (event, newValue) => {
   setCurrentTab(newValue);
@@ -57,6 +61,7 @@ const box={
                 indicatorColor="secondary"
                 aria-label="secondary tabs example"
                 >
+                <Tab value="five" label="All Results" />
                 <Tab value="four" label="All questions" />
                 <Tab value="one" label="Add Questions" />
                 <Tab value="two" label="Take Test" />
@@ -79,6 +84,7 @@ const box={
                  /> : ''}
                
                {(currentTab==='four') ? <AllQuestions base_url={base_url}/> : ''}
+               {(currentTab==='five') ? <AllResults base_url={base_url}/> : ''}
                 </Grid>
         </Container>
       </main>
