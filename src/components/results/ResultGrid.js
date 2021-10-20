@@ -46,11 +46,17 @@ export default function ResultGrid({ result, setResults, base_url }) {
       let score = res.data[0].score
  
         axios.get(base_url+'/getQuestionsForResult').then(res=>{
-          let levelOne=res.data.levelOne.map((q) => {
-            let answers = q.answers.map((a) => {
-              let selected = Mcqs.filter(u=>u.userAns._id===a._id)
-              return { ...a, userAns:selected.length>0};  //adding user Answer
-            });
+          let levelOne=[]
+          res.data.levelOne.forEach(oq=>{  
+            if(Mcqs.filter(q=>q.question_id._id===oq._id).length>0){
+              levelOne.push(oq)
+            }
+          })
+          levelOne.map((q) => {
+              let answers = q.answers.map((a) => {
+                let selected = Mcqs.filter(u => u.userAns._id === a._id )
+                return { ...a, userAns: selected.length > 0 };  //adding user Answer
+              });
             return { ...q, answers };
           });
           let levelTwo = res.data.levelTwo.map((q) => {

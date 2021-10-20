@@ -22,6 +22,7 @@ import 'react-confirm-alert/src/react-confirm-alert.css'; // Import css
 import '../../index.css'
 import BarChat from './BarChat';
 import PieChart from './PieChart'
+import { ProgressBar } from '../common/progressBar';
 
 
 const StyledTableCell = withStyles((theme) => ({
@@ -73,13 +74,18 @@ export default function AllQuestions({ base_url }) {
   const [currentButton, setCurrentButton] = useState('') //clicked action button
   const [TrueFalse, setTrueFalse] = useState({ opOne: false, opTwo: false }); //true false checkbox bindings in edit model
   const [chartData,setchartData] = useState([]) //view model chart
+  const [loader,setLoader] = useState(true)
   // const handleOpen = () => setOpen(true);
   const handleClose = () => {
     setOpenViewModel(false); setOpenEditModel(false)
   };
   useEffect(() => { //all questions
     axios.get(base_url + '/getQuestions?admin=true')
-      .then(res =>{setQuestionList(res.data);questionListCopy=res.data})
+      .then(res =>{
+        setQuestionList(res.data);
+        questionListCopy=res.data
+        setLoader(false)
+      })
       .catch(err => console.log(err))
   }, [])
   useEffect(() => { 
@@ -97,6 +103,7 @@ export default function AllQuestions({ base_url }) {
   },[chartData])
   
   const getSingleQuestion = (id, req) => {
+    setLoader(true)
     setCurrentButton(req)
       axios.get(base_url + `/getSingleQuestion?_id=${id}`)
       .then(res =>{
@@ -110,6 +117,7 @@ export default function AllQuestions({ base_url }) {
         if(orignalCurrentQuestion.type==='2'){
         (orignalCurrentQuestion.correct_answer)?setTrueFalse({ opOne: true, opTwo: false }):setTrueFalse({ opOne: false, opTwo: true })
         }
+        setLoader(false)
         }
     })
        .catch(err => console.log(err))
@@ -125,12 +133,14 @@ export default function AllQuestions({ base_url }) {
       currentQuestion.answers.forEach(ans=>{
       visual.push({option:ans.option,count:data.filter(a=>a.userAns===ans._id).length})
       })
+      setLoader(false)
       setchartData(visual)
     }else{
       let visual ={true:0,false:0}
       data.forEach(a=>{
         a.is_correct?visual[currentQuestion.correct_answer]+=1:visual[!currentQuestion.correct_answer]=+1
       })
+      setLoader(false)
       setchartData([visual])
     }
   }
@@ -308,6 +318,9 @@ export default function AllQuestions({ base_url }) {
 
   return (
     <>
+    {
+      loader && <ProgressBar />
+    }
       <Box
         style={box}
       >
