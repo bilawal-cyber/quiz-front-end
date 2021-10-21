@@ -7,6 +7,7 @@ import axios from "axios";
 import { FormControl, FormLabel, TextField } from "@material-ui/core";
 import { AddQuestionButton as UploadEmail } from "../Buttons";
 import ClassIcon from "@material-ui/icons/Class";
+import { ProgressBar } from '../common/progressBar';
 
 export default function PlayerGrid({ base_url ,setCurrentTab,setResults}) {
   const box = {
@@ -16,6 +17,7 @@ export default function PlayerGrid({ base_url ,setCurrentTab,setResults}) {
   //levelOne:MCQS  levelTwo:True/False
   const [levelOne, setLevelOne] = useState([]);
   const [levelTwo, setLevelTwo] = useState([]);
+  const [loader,setLoader] = useState(false)
 
 
   const [level, setlevel] = useState({ //toggle b/w MCQS and True/False
@@ -44,6 +46,7 @@ export default function PlayerGrid({ base_url ,setCurrentTab,setResults}) {
   }
 
   const getAllQuestions = () => {
+    setLoader(true)
     axios
       .get(base_url + "/getQuestions")
       .then((res) => {
@@ -58,6 +61,7 @@ export default function PlayerGrid({ base_url ,setCurrentTab,setResults}) {
         });
         
         setLevelOne(dataOne); setLevelTwo(dataTwo); //manuplated data
+        setLoader(false)
         setlevel({ one: true, two: false }); //toggle set to MCQS
       })
       .catch((err) => console.log(err));
@@ -72,6 +76,9 @@ export default function PlayerGrid({ base_url ,setCurrentTab,setResults}) {
 
   return (
     <Grid item>
+      {
+        loader && <ProgressBar />
+      }
       {!level.one && !level.two? (
         <Box p={3} sx={{ borderRadius: 16, width: 700 }} style={box}>
           <FormControl component="fieldset" fullWidth sx={{ m: 5 }}>

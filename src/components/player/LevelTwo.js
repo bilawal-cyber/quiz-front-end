@@ -4,6 +4,7 @@ import SkipNextIcon from "@material-ui/icons/SkipNext";
 import {useEffect, useState} from "react";
 import axios from "axios";
 import TrueFalse from "../common/TrueFalse";
+import { ProgressBar } from '../common/progressBar';
 
 const LevelTwo = ({
                       levelTwo,
@@ -19,6 +20,7 @@ const LevelTwo = ({
     const [response, setResponse] = useState([]);
     const [score, setScore] = useState(0)
     const [count,setCount] = useState(0)
+    const [loader,setLoader] = useState(false)
     useEffect(()=>{
       setCount(prev=>prev+1)
     //   console.log(count)
@@ -45,6 +47,7 @@ const LevelTwo = ({
 
     };
     const getUserData = () => {
+        setLoader(true)
         levelOne.forEach((ob) => {
             let userAnswer = ob.answers.filter((ans) => ans.userAns === true)[0];
             setResponse((prev) => {
@@ -87,6 +90,7 @@ const LevelTwo = ({
         }
         axios.post(base_url + '/user/Answers', data)
             .then(res => {
+                setLoader(false)
                 setResults({levelOne:levelOne,levelTwo:levelTwo,score:score})
                 setCurrentTab("three")
             })
@@ -94,7 +98,11 @@ const LevelTwo = ({
     }
 
     return (
-        <List
+        <>
+              {
+        loader && <ProgressBar />
+      }
+       <List
             subheader={
                 <ListSubheader component="div" id="nested-list-subheader">
                     Level Two Questions
@@ -120,6 +128,8 @@ const LevelTwo = ({
                 icon={<SkipNextIcon/>}
             />
         </List>
+        </>
+       
     );
 };
 
